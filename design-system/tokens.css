@@ -1,0 +1,490 @@
+/* ============================================================
+   Color Tokens
+   Source: /Downloads/Animations/styles.css (--tilqvx* vars)
+   ============================================================ */
+
+:root {
+
+  /* ── Base ─────────────────────────────────────────────── */
+  --color-transparent:   transparent;
+  --color-inherit:       inherit;
+  --color-current:       currentColor;
+
+  /* ── Black ────────────────────────────────────────────── */
+  --black:               #0c0c0d;
+  --black-alpha-10:      rgba(12, 12, 13, 0.1);
+  --black-alpha-20:      rgba(12, 12, 13, 0.2);
+  --black-alpha-30:      rgba(12, 12, 13, 0.3);
+  --black-alpha-40:      rgba(12, 12, 13, 0.4);
+  --black-alpha-50:      rgba(12, 12, 13, 0.5);
+  --black-alpha-60:      rgba(12, 12, 13, 0.6);
+  --black-alpha-70:      rgba(12, 12, 13, 0.7);
+  --black-alpha-80:      rgba(12, 12, 13, 0.8);
+  --black-alpha-90:      rgba(12, 12, 13, 0.9);
+
+  /* ── White ────────────────────────────────────────────── */
+  --white:               #ffffff;
+  --white-alpha-10:      rgba(255, 255, 255, 0.1);
+  --white-alpha-20:      rgba(255, 255, 255, 0.2);
+  --white-alpha-30:      rgba(255, 255, 255, 0.3);
+  --white-alpha-40:      rgba(255, 255, 255, 0.4);
+  --white-alpha-50:      rgba(255, 255, 255, 0.5);
+  --white-alpha-60:      rgba(255, 255, 255, 0.6);
+  --white-alpha-70:      rgba(255, 255, 255, 0.7);
+  --white-alpha-80:      rgba(255, 255, 255, 0.8);
+  --white-alpha-90:      rgba(255, 255, 255, 0.9);
+
+  /* ── Blue ─────────────────────────────────────────────── */
+  --blue-100:            #f0f4ff;
+  --blue-200:            #d4defb;
+  --blue-300:            #b9c9f7;
+  --blue-400:            #9db4f3;
+  --blue-500:            #819ef0;
+  --blue-600:            #6689ec;
+  --blue-700:            #446ee7;
+  --blue-800:            #3f63c8;
+  --blue-900:            #3453a8;
+  --blue-1000:           #284389;
+  --blue-1100:           #1d3369;
+  --blue-1200:           #122349;
+
+  /* ── Indigo ───────────────────────────────────────────── */
+  --indigo-100:          #f2f5ff;
+  --indigo-200:          #e6ebff;
+  --indigo-300:          #dcdfff;
+  --indigo-400:          #d2d3ff;
+  --indigo-500:          #bbb9ff;
+  --indigo-600:          #a6a1ff;
+  --indigo-700:          #8e88ff;
+  --indigo-800:          #6460e6;
+  --indigo-900:          #504dbf;
+  --indigo-1000:         #3c3a99;
+  --indigo-1100:         #282773;
+  --indigo-1200:         #18184d;
+
+  /* ── Green ────────────────────────────────────────────── */
+  --green-100:           #e8faf4;
+  --green-200:           #d0f7e6;
+  --green-300:           #a6eaca;
+  --green-400:           #84dfb5;
+  --green-500:           #62d49f;
+  --green-600:           #3fca89;
+  --green-700:           #1dbf73;
+  --green-800:           #00aa5a;  /* brand green */
+  --green-900:           #008a37;
+  --green-1000:          #00732e;
+  --green-1100:          #005c25;
+  --green-1200:          #003912;
+
+  /* ── Grey ─────────────────────────────────────────────── */
+  --grey-100:            #fafafa;
+  --grey-200:            #f5f5f5;
+  --grey-300:            #efeff0;
+  --grey-400:            #e4e5e7;
+  --grey-500:            #dadbdd;
+  --grey-600:            #c5c6c9;
+  --grey-700:            #b5b6ba;
+  --grey-800:            #95979d;
+  --grey-900:            #74767e;
+  --grey-1000:           #62646a;
+  --grey-1100:           #404145;
+  --grey-1200:           #222325;
+
+  /* ── Lime ─────────────────────────────────────────────── */
+  --lime-100:            #f8f9e5;
+  --lime-200:            #f1f4cb;
+  --lime-300:            #edf2b3;
+  --lime-400:            #e8f094;
+  --lime-500:            #e3ee74;
+  --lime-600:            #daea3d;
+  --lime-700:            #d0e500;  /* brand accent */
+  --lime-800:            #bbce00;
+  --lime-900:            #7d8900;
+  --lime-1000:           #687200;
+  --lime-1100:           #465a00;
+  --lime-1200:           #254200;
+
+  /* ── Orange ───────────────────────────────────────────── */
+  --orange-100:          #fff6f2;
+  --orange-200:          #ffe0d4;
+  --orange-300:          #ffc9b4;
+  --orange-400:          #ffa987;
+  --orange-500:          #ff976e;
+  --orange-600:          #ff8758;
+  --orange-700:          #ff7640;
+  --orange-800:          #e0612e;
+  --orange-900:          #c65325;
+  --orange-1000:         #8f2900;
+  --orange-1100:         #6f2000;
+  --orange-1200:         #421300;
+
+  /* ── Pink ─────────────────────────────────────────────── */
+  --pink-100:            #fff5f8;
+  --pink-200:            #ffd3e2;
+  --pink-300:            #ffc3d8;
+  --pink-400:            #ffb1cd;
+  --pink-500:            #ffa1c3;
+  --pink-600:            #ff8eb7;
+  --pink-700:            #ff80ae;
+  --pink-800:            #ef6d94;
+  --pink-900:            #d95f83;
+  --pink-1000:           #be5272;
+  --pink-1100:           #983e59;
+  --pink-1200:           #4d1727;
+
+  /* ── Purple ───────────────────────────────────────────── */
+  --purple-100:          #f8f0ff;
+  --purple-200:          #e8d4fb;
+  --purple-300:          #d8b9f7;
+  --purple-400:          #c89df3;
+  --purple-500:          #b881f0;
+  --purple-600:          #a866ec;
+  --purple-700:          #984ae8;
+  --purple-800:          #8842d0;
+  --purple-900:          #7739b9;
+  --purple-1000:         #6731a1;
+  --purple-1100:         #56288a;
+  --purple-1200:         #462072;
+
+  /* ── Red ──────────────────────────────────────────────── */
+  --red-100:             #ffeded;
+  --red-200:             #fed0d0;
+  --red-300:             #fcb3b3;
+  --red-400:             #fb9797;
+  --red-500:             #fa7a7a;
+  --red-600:             #f85d5d;
+  --red-700:             #f74040;
+  --red-800:             #d93c3c;
+  --red-900:             #c43333;
+  --red-1000:            #ab2d2d;
+  --red-1100:            #912626;
+  --red-1200:            #782020;
+
+  /* ── Teal ─────────────────────────────────────────────── */
+  --teal-100:            #ecfcff;
+  --teal-200:            #cdf5fb;
+  --teal-300:            #afedf7;
+  --teal-400:            #92e6f3;
+  --teal-500:            #75dfee;
+  --teal-600:            #57d7ea;
+  --teal-700:            #3ad0e6;
+  --teal-800:            #30b8cb;
+  --teal-900:            #25a1b0;
+  --teal-1000:           #1b8996;
+  --teal-1100:           #10727b;
+  --teal-1200:           #065a60;
+
+  /* ── Amber ────────────────────────────────────────────── */
+  --amber-100:           #fff7ee;
+  --amber-200:           #ffecd1;
+  --amber-300:           #ffe0b3;
+  --amber-400:           #ffd596;
+  --amber-500:           #ffca79;
+  --amber-600:           #ffbe5b;
+  --amber-700:           #ffb33e;
+  --amber-800:           #e6a139;
+  --amber-900:           #cd8e33;
+  --amber-1000:          #b47c2e;
+  --amber-1100:          #9b6928;
+  --amber-1200:          #825723;
+
+  /* ── Gradients ────────────────────────────────────────── */
+  --gradient-blue:       linear-gradient(180deg, #d4defb 0%, #6689ec 100%);
+  --gradient-red:        linear-gradient(180deg, #fed0d0 0%, #fb9797 100%);
+  --gradient-pink:       linear-gradient(180deg, #ffd3e2 0%, #ffb1cd 100%);
+  --gradient-orange:     linear-gradient(180deg, #ffe0d4 0%, #ff976e 100%);
+  --gradient-amber:      linear-gradient(180deg, #ffecd1 0%, #ffca79 100%);
+  --gradient-purple:     linear-gradient(180deg, #e8d4fb 0%, #b881f0 100%);
+
+
+  /* ============================================================
+     Typography
+     ============================================================ */
+
+  /* Font Families */
+  --font-ui:             "Macan", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-display:        "DomaineDisplay", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-serif:          Georgia, "Times New Roman", serif;
+
+  /* Font Weights */
+  --weight-light:        300;
+  --weight-regular:      400;
+  --weight-semibold:     600;
+  --weight-bold:         700;
+
+  /* Font Sizes — Body */
+  --font-size-xxs:       10px;
+  --font-size-xs:        12px;
+  --font-size-sm:        14px;
+  --font-size-md:        16px;   /* base */
+  --font-size-lg:        18px;
+  --font-size-xl:        20px;
+  --font-size-2xl:       24px;
+
+  /* Font Sizes — Heading */
+  --font-size-h7:        14px;
+  --font-size-h6:        18px;
+  --font-size-h5:        22px;
+  --font-size-h4:        24px;
+  --font-size-h3:        26px;
+  --font-size-h2:        28px;
+  --font-size-h1:        32px;
+
+  /* Font Sizes — Display */
+  --font-size-display-xs:   22px;
+  --font-size-display-sm:   25px;
+  --font-size-display-md:   28px;
+  --font-size-display-lg:   32px;
+  --font-size-display-xl:   36px;
+  --font-size-display-2xl:  38px;
+  --font-size-display-3xl:  48px;
+  --font-size-display-4xl:  56px;
+  --font-size-display-5xl:  66px;
+  --font-size-display-6xl:  74px;
+  --font-size-display-7xl:  92px;
+
+  /* Line Heights */
+  --line-height-xxs:     16px;
+  --line-height-xs:      18px;
+  --line-height-sm:      20px;
+  --line-height-md:      24px;   /* base */
+  --line-height-lg:      28px;
+  --line-height-xl:      32px;
+  --line-height-2xl:     40px;
+  --line-height-3xl:     48px;
+  --line-height-4xl:     56px;
+  --line-height-5xl:     64px;
+  --line-height-6xl:     80px;
+
+
+  /* ============================================================
+     Spacing
+     ============================================================ */
+
+  --space-0:     0;
+  --space-1:     4px;
+  --space-2:     8px;
+  --space-3:     12px;
+  --space-4:     16px;
+  --space-5:     20px;
+  --space-6:     24px;
+  --space-7:     28px;
+  --space-8:     32px;
+  --space-9:     36px;
+  --space-10:    40px;
+  --space-11:    44px;
+  --space-12:    48px;
+  --space-14:    56px;
+  --space-16:    64px;
+  --space-20:    80px;
+  --space-24:    96px;
+  --space-28:    112px;
+  --space-32:    128px;
+
+
+  /* ============================================================
+     Border Radius
+     ============================================================ */
+
+  --radius-none:   0;
+  --radius-xs:     4px;
+  --radius-sm:     6px;
+  --radius-md:     8px;
+  --radius-lg:     12px;
+  --radius-xl:     16px;
+  --radius-2xl:    20px;
+  --radius-full:   9999px;
+
+
+  /* ============================================================
+     Borders
+     ============================================================ */
+
+  --border-width-sm:   1px;
+  --border-width-md:   2px;
+  --border-width-lg:   6px;
+
+
+  /* ============================================================
+     Box Shadows  (6 elevation levels)
+     ============================================================ */
+
+  --shadow-xs:
+    0 0 .88px rgba(0,0,0,.027),
+    0 0 2.29px rgba(0,0,0,.03),
+    0 0 5.52px rgba(0,0,0,.055),
+    0 0 11px  rgba(0,0,0,.09);
+
+  --shadow-sm:
+    0 1.2px  1.92px rgba(0,0,0,.02),
+    0 2px    3.68px rgba(0,0,0,.04),
+    0 1px    5px    rgba(0,0,0,.05);
+
+  --shadow-md:
+    0 .14px  2.29px rgba(0,0,0,.03),
+    0 .37px  4.43px rgba(0,0,0,.047),
+    0 3px    7px    rgba(0,0,0,.09);
+
+  --shadow-lg:
+    0 .08px  2.56px rgba(0,0,0,.05),
+    0 1.28px 5.58px rgba(0,0,0,.08),
+    0 3px    10px   rgba(0,0,0,.13);
+
+  --shadow-xl:
+    0 .27px  1.13px rgba(0,0,0,.07),
+    0 .89px  3.80px rgba(0,0,0,.1),
+    0 5px    17px   rgba(0,0,0,.17);
+
+  --shadow-2xl:
+    0 0     2.17px rgba(0,0,0,.047),
+    0 1.75px 6.01px rgba(0,0,0,.07),
+    0 3.63px 14.47px rgba(0,0,0,.09),
+    0 22px  48px   rgba(0,0,0,.14);
+
+
+  /* ============================================================
+     Drop Shadows  (filter versions, same 6 levels)
+     ============================================================ */
+
+  --drop-shadow-xs:
+    drop-shadow(0 0 .88px rgba(0,0,0,.027))
+    drop-shadow(0 0 2.29px rgba(0,0,0,.03))
+    drop-shadow(0 0 5.52px rgba(0,0,0,.055))
+    drop-shadow(0 0 11px   rgba(0,0,0,.09));
+
+  --drop-shadow-sm:
+    drop-shadow(0 1.2px  1.92px rgba(0,0,0,.02))
+    drop-shadow(0 2px    3.68px rgba(0,0,0,.04))
+    drop-shadow(0 1px    5px    rgba(0,0,0,.05));
+
+  --drop-shadow-md:
+    drop-shadow(0 .14px  2.29px rgba(0,0,0,.03))
+    drop-shadow(0 .37px  4.43px rgba(0,0,0,.047))
+    drop-shadow(0 3px    7px    rgba(0,0,0,.09));
+
+  --drop-shadow-lg:
+    drop-shadow(0 .08px  2.56px rgba(0,0,0,.05))
+    drop-shadow(0 1.28px 5.58px rgba(0,0,0,.08))
+    drop-shadow(0 3px    10px   rgba(0,0,0,.13));
+
+  --drop-shadow-xl:
+    drop-shadow(0 .27px  1.13px rgba(0,0,0,.07))
+    drop-shadow(0 .89px  3.80px rgba(0,0,0,.1))
+    drop-shadow(0 5px    17px   rgba(0,0,0,.17));
+
+  --drop-shadow-2xl:
+    drop-shadow(0 0      2.17px rgba(0,0,0,.047))
+    drop-shadow(0 1.75px 6.01px rgba(0,0,0,.07))
+    drop-shadow(0 3.63px 14.47px rgba(0,0,0,.09))
+    drop-shadow(0 22px   48px   rgba(0,0,0,.14));
+
+
+  /* ============================================================
+     Z-Index
+     ============================================================ */
+
+  --z-below:     -1;
+  --z-0:          0;
+  --z-1:          1;
+  --z-2:          2;
+  --z-auto:       auto;
+  --z-dropdown:   11300;
+  --z-sticky:     11400;
+  --z-overlay:    11500;
+  --z-modal:      11600;
+  --z-popover:    11700;
+  --z-toast:      11900;
+
+
+  /* ============================================================
+     Opacity
+     ============================================================ */
+
+  --opacity-0:    0;
+  --opacity-10:   0.1;
+  --opacity-20:   0.2;
+  --opacity-50:   0.5;
+  --opacity-60:   0.6;
+  --opacity-80:   0.8;
+  --opacity-90:   0.9;
+  --opacity-100:  1;
+
+
+  /* ============================================================
+     Motion — Duration
+     Named to match the Timings section in Penta Motion.
+     ============================================================ */
+
+  --duration-fast-1:    200ms;
+  --duration-fast-2:    320ms;
+  --duration-fast-3:    400ms;
+
+  --duration-medium-1:  600ms;
+  --duration-medium-2:  800ms;
+  --duration-medium-3:  1200ms;
+
+  --duration-slow-1:    1600ms;
+  --duration-slow-2:    2000ms;
+  --duration-slow-3:    2400ms;
+
+
+  /* ============================================================
+     Motion — Easing
+     Named to match the Easings section in Penta Motion.
+     ============================================================ */
+
+  --ease-in-out:  cubic-bezier(0.65, 0.05, 0.36, 1);  /* balanced, symmetrical                  */
+  --ease-out:     cubic-bezier(0.16, 1,    0.3,  1);  /* fast start, smooth deceleration        */
+  --ease-in:      cubic-bezier(0.6,  0.05, 0.75, 0.2);/* gradual start, accelerates to finish   */
+  --ease-penta:   cubic-bezier(0.24, 0.48, 0,    0.98);/* Penta primary interaction easing       */
+
+
+  /* ============================================================
+     Motion — Composite transitions  (suggestion)
+     Shorthand pairings of duration + easing ready to drop into
+     `transition: <property> var(--transition-*)`.
+     ============================================================ */
+
+  --transition-fast:    var(--duration-fast-3)   var(--ease-out);   /* 400ms, snappy feedback     */
+  --transition-base:    var(--duration-medium-1)  var(--ease-out);   /* 600ms, default UI          */
+  --transition-medium:  var(--duration-medium-2)  var(--ease-in-out);/* 800ms, content transitions */
+  --transition-slow:    var(--duration-medium-3)  var(--ease-in-out);/* 1200ms, deliberate reveals */
+  --transition-enter:   var(--duration-medium-1)  var(--ease-out);   /* elements entering view     */
+  --transition-exit:    var(--duration-fast-3)    var(--ease-in);    /* elements leaving view      */
+
+
+  /* ============================================================
+     Blur
+     Named to match the Blur section in Penta Motion.
+     ============================================================ */
+
+  --blur-xs:   2px;
+  --blur-sm:   4px;
+  --blur-md:   6px;
+  --blur-l:    8px;
+  --blur-xl:   10px;
+
+
+  /* ============================================================
+     Animation — Demo loop
+     Used for the hover-to-preview animations on type cards
+     (Expanding, Move, Scale, Fading, Blur).
+     ============================================================ */
+
+  /* Loop cycle — plays on hover */
+  --anim-loop-duration:    var(--duration-medium-3);   /* 1200ms */
+  --anim-loop-easing:      var(--ease-in-out);          /* cubic-bezier(0.65, 0.05, 0.36, 1) */
+
+  /* Restore — plays when hover ends, card returns to rest */
+  --anim-restore-duration: var(--duration-medium-1);   /* 600ms  */
+  --anim-restore-easing:   var(--ease-in-out);          /* cubic-bezier(0.65, 0.05, 0.36, 1) */
+
+  /* Fade — single-shot on hover enter (no loop) */
+  --anim-fade-duration:    var(--duration-medium-1);   /* 600ms  */
+  --anim-fade-easing:      var(--ease-in-out);
+
+  /* Blur — reveal/hide on hover */
+  --anim-blur-duration:    var(--duration-medium-1);   /* 600ms  */
+  --anim-blur-easing:      var(--ease-in-out);
+
+}

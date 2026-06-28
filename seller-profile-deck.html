@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Seller Profile Page — Decisions & Why · Penta</title>
+
+  <link rel="preload" href="https://npm-assets.fiverrcdn.com/assets/uploads/macan-bold.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="https://npm-assets.fiverrcdn.com/assets/uploads/macan-regular.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="stylesheet" href="design-system/tokens.css" />
+  <link rel="stylesheet" href="design-system/styles.css" />
+
+  <style>
+    :root{
+      --ink:#222325; --body:#404145; --muted:#62646a; --faint:#95979d;
+      --line:#e4e5e7; --divide:#efeff0; --paper:#fff;
+      --ease-penta:cubic-bezier(.24,.48,0,.98);
+      --ease-out:cubic-bezier(.16,1,.3,1);
+      --ai1:#7b61ff; --ai2:#3b6fff;
+    }
+    *{box-sizing:border-box;}
+    html,body{height:100%;}
+    body{margin:0;font-family:'Macan','Helvetica Neue',Helvetica,Arial,sans-serif;color:var(--body);
+      background:radial-gradient(120% 120% at 100% 0%,#fafafa 0%,#fff 55%);
+      -webkit-font-smoothing:antialiased;overflow:hidden;}
+
+    /* chrome */
+    .deck-progress{position:fixed;top:0;inset-inline:0;height:3px;background:var(--divide);z-index:30;}
+    .deck-progress>i{display:block;height:100%;width:0;background:var(--ink);transition:width .4s var(--ease-out);}
+    .deck-brand{position:fixed;top:20px;inset-inline-end:30px;z-index:30;display:flex;align-items:center;gap:8px;
+      font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--faint);}
+    .deck-brand b{color:var(--ink);font-weight:600;letter-spacing:0;text-transform:none;}
+    .deck-dot{width:7px;height:7px;border-radius:50%;background:var(--ink);}
+    .deck-count{position:fixed;bottom:22px;inset-inline-end:30px;z-index:30;font-size:13px;color:var(--faint);
+      font-variant-numeric:tabular-nums;}
+    .deck-nav{position:fixed;bottom:18px;inset-inline-start:30px;z-index:30;display:flex;gap:8px;}
+    .deck-nav button{width:40px;height:40px;border-radius:50%;border:1px solid var(--line);background:#fff;
+      color:var(--ink);font-size:18px;cursor:pointer;display:grid;place-items:center;transition:all .3s var(--ease-penta);}
+    .deck-nav button:hover{background:var(--ink);color:#fff;border-color:var(--ink);}
+    .deck-dots{position:fixed;bottom:26px;left:50%;transform:translateX(-50%);z-index:30;display:flex;gap:9px;}
+    .deck-dots i{width:8px;height:8px;border-radius:50%;background:#d3d4d7;cursor:pointer;transition:all .3s var(--ease-penta);}
+    .deck-dots i.on{background:var(--ink);transform:scale(1.25);}
+
+    /* slides */
+    /* inactive slides hide INSTANTLY (no transition) so they can never ghost behind the active one */
+    .slide{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:safe center;
+      padding:clamp(32px,5.5vw,84px) clamp(36px,6vw,96px) 92px;opacity:0;visibility:hidden;transform:translateY(16px);z-index:0;
+      background:radial-gradient(120% 120% at 100% 0%,#fafafa 0%,#fff 55%);overflow:auto;}
+    /* only the active (incoming) slide animates — it fades up from the identical background */
+    .slide.on{opacity:1;visibility:visible;transform:none;z-index:1;
+      transition:opacity .45s var(--ease-out),transform .45s var(--ease-out);}
+    .kicker{font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);margin:0 0 14px;font-weight:600;}
+    h1{font-size:clamp(32px,5vw,68px);line-height:1.04;color:var(--ink);margin:0 0 20px;font-weight:700;letter-spacing:-.02em;max-width:18ch;overflow-wrap:break-word;}
+    h2{font-size:clamp(26px,3.4vw,42px);line-height:1.1;color:var(--ink);margin:0 0 26px;font-weight:700;letter-spacing:-.01em;max-width:22ch;}
+    .lead{font-size:clamp(17px,1.5vw,22px);line-height:1.5;color:var(--body);max-width:60ch;margin:0 0 10px;}
+    .muted{color:var(--muted);} .ink{color:var(--ink);font-weight:600;}
+    .accent{background:linear-gradient(90deg,var(--ai1),var(--ai2));-webkit-background-clip:text;background-clip:text;color:transparent;font-weight:700;}
+
+    /* NOTE: these class names collide with design-system/styles.css `.grid`
+       (repeat(auto-fill,minmax(380px,1fr))). Scope to `.slide` + force so the
+       deck's column counts always win, and pin width:100% so the grid fills the slide. */
+    .grid{display:grid;gap:18px;margin-top:8px;width:100%;}
+    .slide .grid.g2{grid-template-columns:repeat(2,1fr)!important;}
+    .slide .grid.g3{grid-template-columns:repeat(3,1fr)!important;}
+    @media(max-width:900px){.slide .grid.g2,.slide .grid.g3{grid-template-columns:1fr!important;}}
+    .card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:22px 24px;}
+    .card h3{margin:0 0 6px;font-size:17px;color:var(--ink);font-weight:700;}
+    .card p{margin:0;font-size:14.5px;line-height:1.5;color:var(--muted);}
+    .card .tagline{font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:var(--faint);margin:10px 0 0;font-weight:600;}
+    .card.dark{background:var(--ink);border-color:var(--ink);}
+    .card.dark h3,.card.dark p,.card.dark .tagline{color:#fff;}
+    .card.dark p,.card.dark .tagline{color:#c9cacd;}
+    .card.ai{border:1px solid transparent;background:
+      linear-gradient(#fff,#fff) padding-box,
+      linear-gradient(120deg,var(--ai1),var(--ai2)) border-box;}
+    .card.ai .tagline{color:var(--ai1);}
+
+    /* strip / IA list */
+    .strip{display:flex;flex-direction:column;gap:10px;margin-top:6px;max-width:1000px;}
+    .row{display:flex;align-items:center;gap:16px;background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px 18px;}
+    .row .n{width:30px;height:30px;border-radius:50%;background:var(--ink);color:#fff;display:grid;place-items:center;
+      font-size:14px;font-weight:700;flex-shrink:0;}
+    .row .b{font-size:16px;color:var(--ink);font-weight:700;}
+    .row .w{font-size:14px;color:var(--muted);margin-inline-start:auto;text-align:end;max-width:46%;}
+    .row.aiRow{background:linear-gradient(#fff,#fff) padding-box,linear-gradient(120deg,var(--ai1),var(--ai2)) border-box;border:1px solid transparent;}
+    .row.aiRow .n{background:linear-gradient(120deg,var(--ai1),var(--ai2));}
+
+    .stat{display:flex;gap:30px;flex-wrap:wrap;margin-top:18px;}
+    .stat .s{display:flex;flex-direction:column;}
+    .stat .s b{font-size:clamp(30px,3.6vw,48px);color:var(--ink);font-weight:700;line-height:1;letter-spacing:-.02em;}
+    .stat .s span{font-size:14px;color:var(--muted);margin-top:6px;}
+
+    .pills{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px;}
+    .pill{font-size:13.5px;padding:8px 15px;border-radius:999px;border:1px solid var(--line);color:var(--body);background:#fff;}
+    .pill.k{background:var(--ink);color:#fff;border-color:var(--ink);}
+
+    ul.clean{margin:14px 0 0;padding:0;list-style:none;max-width:62ch;}
+    ul.clean li{position:relative;padding-inline-start:26px;margin-bottom:14px;font-size:16.5px;line-height:1.5;color:var(--body);}
+    ul.clean li::before{content:"";position:absolute;inset-inline-start:0;top:9px;width:9px;height:9px;background:var(--ink);transform:rotate(45deg);}
+    ul.clean li b{color:var(--ink);}
+
+    .two{display:grid;grid-template-columns:1.1fr .9fr;gap:48px;align-items:center;}
+    @media(max-width:900px){.two{grid-template-columns:1fr;gap:24px;}}
+
+    .hint{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:25;font-size:12px;color:var(--faint);opacity:.0;transition:opacity .4s;}
+
+    /* section dividers */
+    .slide.divider{justify-content:center;}
+    .divider .part{font-size:clamp(13px,1.3vw,15px);letter-spacing:.2em;text-transform:uppercase;color:var(--faint);font-weight:600;margin:0 0 18px;}
+    .divider h1{margin-bottom:18px;}
+    .divider .barline{width:64px;height:4px;background:var(--ink);border-radius:2px;margin-top:8px;}
+    .divider.research .barline{background:linear-gradient(90deg,var(--ai1),var(--ai2));}
+
+    /* reference cards (Mobbin screenshots) */
+    .refgrid{display:grid;gap:16px;margin-top:8px;}
+    .refgrid.r2{grid-template-columns:repeat(2,1fr);}
+    .refgrid.r3{grid-template-columns:repeat(3,1fr);}
+    @media(max-width:900px){.refgrid.r2,.refgrid.r3{grid-template-columns:1fr;}}
+    .ref{display:flex;flex-direction:column;border:1px solid var(--line);border-radius:14px;overflow:hidden;background:#fff;}
+    .ref img{width:100%;display:block;aspect-ratio:16/10;object-fit:cover;object-position:top;background:#f3f3f4;border-bottom:1px solid var(--divide);}
+    .ref .meta{padding:12px 15px;}
+    .ref .meta b{display:block;font-size:14px;color:var(--ink);font-weight:700;margin-bottom:3px;}
+    .ref .meta span{font-size:13px;color:var(--muted);line-height:1.4;}
+    .ref .meta a{font-size:12.5px;color:var(--ai1);text-decoration:none;font-weight:600;}
+    .ref .meta a:after{display:none;content:none;}
+
+    /* matrix table */
+    .matrix{width:100%;border-collapse:collapse;margin-top:10px;font-size:14.5px;border:1px solid var(--line);border-radius:14px;overflow:hidden;}
+    .matrix th,.matrix td{padding:11px 14px;text-align:left;border-top:1px solid var(--divide);}
+    .matrix th{background:#fafafa;color:var(--ink);font-weight:700;font-size:13px;}
+    .matrix td:first-child{color:var(--ink);font-weight:600;}
+    .matrix td+td,.matrix th+th{border-left:1px solid var(--divide);}
+    .matrix .win{color:var(--ai1);font-weight:700;}
+
+    /* ===== presenter chrome — chapter rail ===== */
+    .chrail{position:fixed;top:16px;left:50%;transform:translateX(-50%);z-index:35;display:flex;gap:4px;
+      background:rgba(255,255,255,.72);backdrop-filter:blur(12px) saturate(1.3);border:1px solid var(--line);border-radius:999px;padding:5px;
+      box-shadow:0 6px 22px rgba(20,20,40,.06);}
+    .chrail button{border:none;background:transparent;font:inherit;font-size:12.5px;font-weight:600;color:var(--muted);
+      padding:7px 15px;border-radius:999px;cursor:pointer;display:flex;align-items:center;gap:8px;white-space:nowrap;
+      transition:background .25s var(--ease-penta),color .25s var(--ease-penta);}
+    .chrail button .num{font-variant-numeric:tabular-nums;opacity:.55;font-weight:700;}
+    .chrail button:hover{color:var(--ink);background:#f1f1f2;}
+    .chrail button.on{background:var(--ink);color:#fff;}
+    .chrail button.on .num{opacity:.7;}
+    @media(max-width:760px){.chrail button .lbl{display:none;}}
+
+    /* tools (overview + help) */
+    .deck-tools{position:fixed;top:18px;inset-inline-start:24px;z-index:35;display:flex;gap:8px;}
+    .deck-tools button{width:38px;height:38px;border-radius:10px;border:1px solid var(--line);background:rgba(255,255,255,.8);
+      backdrop-filter:blur(8px);color:var(--ink);cursor:pointer;display:grid;place-items:center;transition:all .25s var(--ease-penta);}
+    .deck-tools button:hover{background:var(--ink);color:#fff;border-color:var(--ink);}
+    .deck-tools svg{width:17px;height:17px;stroke:currentColor;fill:none;stroke-width:1.7;}
+
+    /* overview grid overlay */
+    .ov{position:fixed;inset:0;z-index:60;background:rgba(250,250,251,.9);backdrop-filter:blur(16px);
+      display:none;flex-direction:column;padding:clamp(22px,4vw,52px);overflow:auto;}
+    .ov.open{display:flex;animation:ovfade .3s var(--ease-out);}
+    @keyframes ovfade{from{opacity:0}to{opacity:1}}
+    .ov-h{display:flex;align-items:baseline;gap:14px;margin-bottom:22px;}
+    .ov-h h3{font-size:22px;color:var(--ink);font-weight:700;margin:0;}
+    .ov-h span{font-size:13px;color:var(--faint);}
+    .ov-h .x{margin-inline-start:auto;width:40px;height:40px;border-radius:50%;border:1px solid var(--line);background:#fff;cursor:pointer;font-size:18px;color:var(--ink);}
+    .ov-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(206px,1fr));gap:13px;}
+    .ov-card{position:relative;overflow:hidden;text-align:left;border:1px solid var(--line);background:#fff;border-radius:12px;padding:13px 15px;cursor:pointer;
+      min-height:94px;display:flex;flex-direction:column;gap:6px;font:inherit;
+      transition:box-shadow .25s var(--ease-out),transform .25s var(--ease-out),border-color .25s;}
+    .ov-card:hover{box-shadow:0 10px 26px rgba(20,20,40,.1);transform:translateY(-2px);border-color:#c9cacd;}
+    .ov-card.on{border-color:var(--ink);box-shadow:0 0 0 2px var(--ink);}
+    .ov-card .n{font-size:11px;color:var(--faint);font-variant-numeric:tabular-nums;letter-spacing:.06em;}
+    .ov-card .t{font-size:13.5px;color:var(--ink);font-weight:600;line-height:1.3;white-space:normal;overflow-wrap:anywhere;word-break:break-word;}
+    .ov-card .ch{margin-top:auto;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--ai1);font-weight:700;}
+    .ov-card.dv{background:var(--ink);} .ov-card.dv .t{color:#fff;} .ov-card.dv .n,.ov-card.dv .ch{color:#9a9ba0;}
+
+    /* chapter cover (enhanced divider) */
+    .divider .chnum{font-size:clamp(70px,13vw,164px);line-height:.86;font-weight:700;color:var(--ink);letter-spacing:-.04em;margin:0 0 4px;}
+    .divider.research .chnum{background:linear-gradient(120deg,var(--ai1),var(--ai2));-webkit-background-clip:text;background-clip:text;color:transparent;}
+    .divider .chmeta{display:flex;gap:9px;flex-wrap:wrap;margin-top:24px;}
+    .divider .chmeta .pill{font-size:13px;}
+
+    /* agenda */
+    .agenda{display:flex;flex-direction:column;gap:13px;margin-top:8px;max-width:960px;}
+    .ag-item{display:flex;align-items:center;gap:22px;border:1px solid var(--line);border-radius:16px;padding:19px 24px;background:#fff;
+      cursor:pointer;transition:box-shadow .3s var(--ease-out),transform .3s var(--ease-out),border-color .3s;}
+    .ag-item:hover{box-shadow:0 12px 30px rgba(20,20,40,.09);transform:translateX(5px);border-color:#c9cacd;}
+    .ag-item .agn{font-size:32px;font-weight:700;color:var(--ink);font-variant-numeric:tabular-nums;letter-spacing:-.02em;min-width:58px;}
+    .ag-item.ai .agn{background:linear-gradient(120deg,var(--ai1),var(--ai2));-webkit-background-clip:text;background-clip:text;color:transparent;}
+    .ag-item .agt{font-size:19px;font-weight:700;color:var(--ink);}
+    .ag-item .agd{font-size:14px;color:var(--muted);margin-top:2px;}
+    .ag-item .agarrow{margin-inline-start:auto;color:var(--faint);font-size:22px;transition:transform .3s var(--ease-penta),color .3s;}
+    .ag-item:hover .agarrow{color:var(--ink);transform:translateX(4px);}
+
+    /* mini live preview frame */
+    .pvf{border:1px solid var(--line);border-radius:12px;overflow:hidden;box-shadow:0 16px 50px rgba(20,20,40,.13);background:#fff;}
+    .pvf .bar{height:26px;background:#f4f4f5;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:5px;padding:0 11px;}
+    .pvf .bar i{width:8px;height:8px;border-radius:50%;background:#dfe0e2;display:inline-block;}
+    .pvf .bar span{margin-inline-start:8px;font-size:11px;color:var(--muted);}
+    .pvf .vp{overflow:hidden;position:relative;}
+    .pvf iframe{border:0;transform-origin:top left;}
+
+    @media (prefers-reduced-motion: reduce){.slide.on{transition:none;}.slide,.slide.on{transform:none;}.ov.open,.divider .chnum{animation:none;}}
+  </style>
+</head>
+<body>
+  <div class="deck-progress"><i id="bar"></i></div>
+  <div class="deck-brand"><span class="deck-dot"></span> Penta · <b id="sec">Overview</b></div>
+  <div class="deck-count"><span id="cur">1</span> / <span id="tot">11</span></div>
+
+  <!-- 1 — TITLE -->
+  <section class="slide on" data-sec="Overview">
+    <div class="two" style="grid-template-columns:1.15fr .85fr;">
+      <div>
+        <p class="kicker">Penta · Product Design Review · 2026-06-27</p>
+        <h1>Seller Profile Page <span class="muted" style="font-weight:700">— treat the seller like an artist.</span></h1>
+        <p class="lead">When you click <span class="ink">Tommy Frank</span>, you should land on a page that earns trust, shows the work, and makes hiring obvious. Here's how we got there — in <span class="ink">three chapters</span>.</p>
+        <div class="pills">
+          <span class="pill k">01 · Penta PM</span><span class="pill k">02 · Design Research</span><span class="pill k">03 · Senior Design</span>
+        </div>
+      </div>
+      <div class="pvf" aria-hidden="true">
+        <div class="bar"><i></i><i></i><i></i><span>profile.html</span></div>
+        <div class="vp" style="height:330px;"><iframe src="profile.html" title="Seller profile preview" loading="lazy" style="width:1280px;height:825px;transform:scale(.39);"></iframe></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- AGENDA -->
+  <section class="slide" data-sec="Overview">
+    <p class="kicker">Agenda</p>
+    <h2>Three chapters, one decision.</h2>
+    <div class="agenda">
+      <div class="ag-item" data-goch="1"><div class="agn">01</div><div><div class="agt">Penta PM</div><div class="agd">Frame the problem, ground it in the repo, shape a decision-ready PRD.</div></div><div class="agarrow">→</div></div>
+      <div class="ag-item" data-goch="2"><div class="agn">02</div><div><div class="agt">Design Research</div><div class="agd">20 real competitor references from Mobbin → an opportunity map.</div></div><div class="agarrow">→</div></div>
+      <div class="ag-item ai" data-goch="3"><div class="agn">03</div><div><div class="agt">Senior Design</div><div class="agd">The build — desktop + mobile, states, accessibility, and the AI layer.</div></div><div class="agarrow">→</div></div>
+    </div>
+    <p class="lead muted" style="margin-top:18px;font-size:15px">Tip: press <span class="ink">O</span> for an overview of every slide · <span class="ink">1·2·3</span> to jump between chapters.</p>
+  </section>
+
+  <!-- CHAPTER 1 COVER -->
+  <section class="slide divider" data-sec="Penta PM" data-ch="1" data-chtitle="Penta PM">
+    <p class="part">Chapter 01</p>
+    <div class="chnum">01</div>
+    <h1>Penta PM Workflow</h1>
+    <p class="lead">Frame the problem, ground it in the repo, and shape a decision-ready PRD — the <span class="ink">what</span> and the <span class="ink">why</span> before any pixels.</p>
+    <div class="chmeta"><span class="pill">The problem</span><span class="pill">Reuse audit</span><span class="pill">Competitor arc</span><span class="pill">The IA strip</span><span class="pill">PRD</span></div>
+  </section>
+
+  <!-- 2 — THE GAP -->
+  <section class="slide">
+    <p class="kicker">The problem</p>
+    <h2>Today, clicking Tommy goes <span class="muted">nowhere.</span></h2>
+    <div class="two">
+      <div>
+        <p class="lead">He appears <span class="ink">three times</span> on the gig — the seller block, the "Get to know Tommy Frank" card, and review rows — but none of it is a link. We drop one of the highest-intent moments in any marketplace:</p>
+        <ul class="clean">
+          <li><b>Who</b> is this person?</li>
+          <li>Can I <b>trust</b> them?</li>
+          <li>What <b>else</b> can they do for me?</li>
+        </ul>
+      </div>
+      <div class="card dark">
+        <h3>The missing route</h3>
+        <p>No <code style="color:#fff">profile.html</code> exists. The profile is the hub that ties identity → proof → every Tommy gig → trust together. Without it, the prototype dead-ends on its most important person.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3 — WHAT WE ALREADY HAVE -->
+  <section class="slide">
+    <p class="kicker">Reuse-first · the DS is CONNECTED</p>
+    <h2>~70% of the page <span class="muted">already exists</span> as parts on the gig.</h2>
+    <div class="grid g3">
+      <div class="card"><h3>Identity</h3><p>Name, <b>Verified Pro</b> badge, Level 2 dots, ★4.9 (612), "12 in queue".</p><p class="tagline">.gig-seller-block</p></div>
+      <div class="card"><h3>Facts grid</h3><p>France · Member Apr 2020 · Avg reply 1h · Last delivery ~3h · EN/FR.</p><p class="tagline">.seller-meta-card</p></div>
+      <div class="card"><h3>Bio</h3><p>Four real paragraphs — 8+ yrs, film/game/editorial, 40+ countries.</p><p class="tagline">.seller-bio</p></div>
+      <div class="card"><h3>Portfolio</h3><p>"Our Latest Creations" expanding gallery + filter chips.</p><p class="tagline">.lc-section · .gfilter</p></div>
+      <div class="card"><h3>Gig cards</h3><p>"From $X" service cards for the discovery band.</p><p class="tagline">.box service</p></div>
+      <div class="card ai"><h3>AI surfaces</h3><p>Glow borders &amp; inner-glow for the AI layer.</p><p class="tagline">ai_glow family</p></div>
+    </div>
+    <p class="lead muted" style="margin-top:22px">The work is <span class="ink">composition + a few new bands + the AI layer</span> — not a rebuild.</p>
+  </section>
+
+  <!-- 4 — COMPETITOR TEARDOWN -->
+  <section class="slide">
+    <p class="kicker">Competitor teardown · what each does best</p>
+    <h2>Every strong profile is the same arc.</h2>
+    <div class="grid g3">
+      <div class="card"><h3>Fiverr</h3><p>Identity → trust → Contact → gigs → reviews. The <b>Pro badge</b> as trust anchor.</p><p class="tagline">Steal: the spine + our DNA</p></div>
+      <div class="card"><h3>Upwork</h3><p>Quantified trust: Job Success %, earnings, hours, Top Rated Plus.</p><p class="tagline">Steal: one headline metric</p></div>
+      <div class="card"><h3>Behance</h3><p>Cover image + project grid first. The <b>work</b> is the hero.</p><p class="tagline">Steal: portfolio before bio</p></div>
+      <div class="card"><h3>Dribbble</h3><p>"Available to hire" + Services with explicit pricing &amp; turnaround.</p><p class="tagline">Steal: hire-me + from $X band</p></div>
+      <div class="card"><h3>Contra</h3><p>Minimal, portfolio-forward, <b>one</b> primary CTA.</p><p class="tagline">Steal: restraint, single CTA</p></div>
+      <div class="card dark"><h3>Spotify ★</h3><p>Hero + monthly listeners + "Popular" (the hits) → depth → "fans also like".</p><p class="tagline">Steal: the whole IA</p></div>
+    </div>
+    <p class="lead muted" style="margin-top:18px"><span class="ink">Identity → Proof → Depth → Validation → Continuation.</span> The only variable is Proof-vs-Depth order. Tommy is visual → <span class="ink">Proof-first.</span></p>
+  </section>
+
+  <!-- 5 — SPOTIFY INSIGHT -->
+  <section class="slide">
+    <p class="kicker">The framing device · your analogy, decoded</p>
+    <h2>Treat the seller like a <span class="accent">Spotify artist.</span></h2>
+    <div class="two">
+      <ul class="clean">
+        <li>Full hero + <b>one</b> headline metric (monthly listeners → <span class="ink">"612 five-star reviews, 40+ countries"</span>).</li>
+        <li><b>"Popular" first</b> — the greatest hits before the deep cuts (featured portfolio before bio).</li>
+        <li><b>Depth later</b> — discography &amp; about for those who scrolled (all gigs, bio).</li>
+        <li><b>"Fans also like"</b> — related sellers keep the buyer in the funnel.</li>
+      </ul>
+      <div class="card ai">
+        <h3>The bet in one line</h3>
+        <p style="font-size:16px;color:var(--ink)">Hero + one trust line → greatest-hits portfolio → about → all gigs → reviews → related — with an <b>AI "is he right for me?"</b> layer that does the buyer's homework.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6 — THE STRIP -->
+  <section class="slide">
+    <p class="kicker">Recommended IA · the "strip"</p>
+    <h2>Top to bottom — and why each band earns its place.</h2>
+    <div class="strip">
+      <div class="row"><div class="n">1</div><div class="b">Profile hero</div><div class="w">First 3s decide trust — identity + the one convincing line + Contact.</div></div>
+      <div class="row"><div class="n">2</div><div class="b">Trust stats bar</div><div class="w">Quantify it: ★4.9 · 612 · 1h reply · 99% on-time · 12 in queue.</div></div>
+      <div class="row aiRow"><div class="n">3</div><div class="b">AI — "Is Tommy right for your project?"</div><div class="w">Closes the buyer's biggest question without reading 612 reviews.</div></div>
+      <div class="row"><div class="n">4</div><div class="b">Featured work — "greatest hits"</div><div class="w">He's an illustrator. Lead with the eyes.</div></div>
+      <div class="row"><div class="n">5</div><div class="b">About Tommy</div><div class="w">Depth + skills/tools for those who scrolled past the proof.</div></div>
+      <div class="row"><div class="n">6</div><div class="b">Services — all gigs</div><div class="w">Cross-gig discovery — a mini-storefront.</div></div>
+      <div class="row"><div class="n">7</div><div class="b">Reviews + breakdown + AI digest</div><div class="w">Validation, made legible in 5 seconds.</div></div>
+      <div class="row"><div class="n">8</div><div class="b">Buyers also viewed</div><div class="w">Continuation — "fans also like".</div></div>
+    </div>
+  </section>
+
+  <!-- 7 — TRUST MODEL -->
+  <section class="slide">
+    <p class="kicker">The trust model · quantify confidence</p>
+    <h2>Numbers do the convincing.</h2>
+    <p class="lead">Like Upwork's JSS and Spotify's monthly listeners — a hesitant buyer believes a <span class="ink">scannable number</span> faster than a paragraph. We already have the data on Tommy:</p>
+    <div class="stat">
+      <div class="s"><b>4.9★</b><span>612 reviews</span></div>
+      <div class="s"><b>1h</b><span>avg response</span></div>
+      <div class="s"><b>~3h</b><span>last delivery</span></div>
+      <div class="s"><b>40+</b><span>countries served</span></div>
+      <div class="s"><b>12</b><span>orders in queue</span></div>
+      <div class="s"><b>8+ yrs</b><span>experience</span></div>
+    </div>
+    <p class="lead muted" style="margin-top:24px">Packaged as a reusable <span class="ink">.trust-stats</span> strip — proposed back to the design system.</p>
+  </section>
+
+  <!-- 8 — AI BETS -->
+  <section class="slide">
+    <p class="kicker">Ideation · the AI layer</p>
+    <h2>Three AI bets — <span class="accent">one coherent layer,</span> not bolt-ons.</h2>
+    <div class="grid g3">
+      <div class="card ai"><h3>1 · Fit summary ⭐</h3><p>Buyer types their brief → tailored "why Tommy fits", recommended <b>package</b>, and an honest "best when / watch-out". Browsing → decision.</p><p class="tagline">.ai-fit-summary</p></div>
+      <div class="card ai"><h3>2 · Review digest</h3><p>612 reviews → themes with evidence: "praised for speed, color, communication; complex briefs benefit from a kickoff call."</p><p class="tagline">.ai-review-digest</p></div>
+      <div class="card ai"><h3>3 · Ask Tommy's AI</h3><p>24/7 pre-sales concierge on his FAQ/portfolio — answers, drafts a brief, hands the warm lead over. Softens the reply-time gap.</p><p class="tagline">.ask-seller</p></div>
+    </div>
+    <p class="lead muted" style="margin-top:20px">In the prototype these are <span class="ink">scripted/canned</span> (no backend) and clearly labeled "AI summary · see sources." Rendered with the existing <span class="ink">ai_glow</span> family.</p>
+  </section>
+
+  <!-- 9 — REUSE / EXTEND / INVENT -->
+  <section class="slide">
+    <p class="kicker">Builder posture · no silent invention</p>
+    <h2>Reuse → Extend → Invent (flagged).</h2>
+    <div class="grid g3">
+      <div class="card"><h3>Reuse as-is</h3><p>Header · categories · footer · seller block · Verified Pro badge · level dots · stars · meta grid · bio · gallery + chips · gig cards · buttons · ai_glow · motion tokens.</p></div>
+      <div class="card"><h3>Extend <span class="muted">(DS language)</span></h3><p>.profile-hero · .trust-stats · .review-breakdown · .profile-sticky-cta · .related-sellers · segmented-control--chip. All proposed back.</p></div>
+      <div class="card ai"><h3>Invent <span class="muted">(AI, flagged)</span></h3><p>.ai-fit-summary · .ai-review-digest · .ask-seller — nothing existing synthesizes trust/fit for a buyer. Propose as the DS's AI layer.</p></div>
+    </div>
+    <p class="lead muted" style="margin-top:20px">New route <span class="ink">profile.html</span> at root → added to <span class="ink">vite.config.js</span>; linked from the gig's seller name/avatar. States: loading · empty · AI idle/thinking/error · online/offline. RTL-ready via logical properties.</p>
+  </section>
+
+  <!-- 10 — SUCCESS -->
+  <section class="slide">
+    <p class="kicker">How we'll know it worked</p>
+    <h2>Success criteria.</h2>
+    <ul class="clean">
+      <li>A first-time visitor decides <b>"I'd contact Tommy — and why"</b> within ~20 seconds.</li>
+      <li>All three jobs are served: <b>portfolio proof</b>, <b>trust</b>, and <b>cross-gig discovery</b> (every gig reachable).</li>
+      <li>A <b>single, always-visible Contact path</b> (sticky rail).</li>
+      <li>The AI fit-summary recommends a <b>plausible package</b> ($35/$85/$150); the digest makes reviews legible without reading them.</li>
+      <li><b>≥70% design-system reuse</b>, every extension flagged back.</li>
+    </ul>
+  </section>
+
+  <!-- 11 — BRIDGE INTO PART 2 -->
+  <section class="slide">
+    <p class="kicker">Handoff · PM → Design Research</p>
+    <h2>The PM brief asked one thing of research:</h2>
+    <div class="two">
+      <div>
+        <p class="lead">Validate (or revise) this IA against <span class="ink">real product UI</span> before we design pixels:</p>
+        <ul class="clean">
+          <li><b>What:</b> seller / freelancer / creator profile pages + the bands we propose.</li>
+          <li><b>Which:</b> Fiverr, Upwork, Behance, + review-breakdown &amp; AI-summary patterns.</li>
+          <li><b>How:</b> capture section order, trust elements, CTA stickiness, portfolio-vs-bio order, AI labeling.</li>
+        </ul>
+      </div>
+      <div class="card dark">
+        <h3>A good result</h3>
+        <p>Confirms proof-first + one-metric + sticky single CTA — and gives concrete layouts for the trust bar, AI fit card, and review digest. Or revises with evidence.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CHAPTER 2 COVER -->
+  <section class="slide divider research" data-sec="Design Research" data-ch="2" data-chtitle="Design Research">
+    <p class="part">Chapter 02</p>
+    <div class="chnum">02</div>
+    <h1>Penta Design Research</h1>
+    <p class="lead">Pull <span class="ink">real</span> competitor UI from Mobbin, analyze how the best products solve each band, and turn it into concrete concepts — the <span class="ink">how others do it</span>.</p>
+    <div class="chmeta"><span class="pill">20 references</span><span class="pill">Comparison matrix</span><span class="pill">Reviews &amp; AI patterns</span><span class="pill">Opportunity map</span></div>
+  </section>
+
+  <!-- R1 — METHOD -->
+  <section class="slide">
+    <p class="kicker">Method</p>
+    <h2>20 real references · 9 products · web + mobile.</h2>
+    <div class="stat">
+      <div class="s"><b>20</b><span>real screens (Mobbin)</span></div>
+      <div class="s"><b>9</b><span>products analyzed</span></div>
+      <div class="s"><b>6</b><span>bands benchmarked</span></div>
+      <div class="s"><b>3</b><span>mobile patterns</span></div>
+    </div>
+    <p class="lead muted" style="margin-top:22px">Every screen below is a <span class="ink">real, cited</span> reference — Fiverr · Upwork · Behance · Turo · Skillshare · Indeed · Notion · Linear · ManyChat · Whatnot · ChatGPT · BlaBlaCar. No invented UI. Full pack: <span class="ink">docs/research/seller-profile-page/references.md</span>.</p>
+  </section>
+
+  <!-- R2 — MATRIX -->
+  <section class="slide">
+    <p class="kicker">Comparison matrix · table-stakes vs. where we win</p>
+    <h2 style="margin-bottom:14px">Decoded side by side.</h2>
+    <table class="matrix">
+      <tr><th>Band</th><th>Fiverr</th><th>Upwork</th><th>Behance</th><th>Best move for Tommy</th></tr>
+      <tr><td>Hero</td><td>Sidebar card</td><td>Bar + rate</td><td>Cover banner</td><td class="win">Behance cover + Fiverr identity</td></tr>
+      <tr><td>Headline trust</td><td>★ + level</td><td>Job Success %</td><td>Appreciations</td><td class="win">One number: ★4.9 · 612 · 40+ countries</td></tr>
+      <tr><td>Portfolio</td><td>Carousel</td><td>Catalog</td><td>Grid hero</td><td class="win">Grid first (visual seller)</td></tr>
+      <tr><td>Reviews</td><td>Breakdown + sub-scores</td><td>Feedback list</td><td>—</td><td class="win">Sub-scores + theme chips + AI digest</td></tr>
+      <tr><td>AI</td><td>—</td><td>—</td><td>—</td><td class="win">Our differentiator (3 bets)</td></tr>
+      <tr><td>Primary CTA</td><td>Contact</td><td>Hire/Message</td><td>Hire card</td><td class="win">Sticky single Contact</td></tr>
+    </table>
+  </section>
+
+  <!-- R3 — FIVERR -->
+  <section class="slide">
+    <p class="kicker">Direct competitor · Fiverr</p>
+    <h2>The baseline to honor.</h2>
+    <div class="refgrid r2">
+      <div class="ref"><img src="docs/research/seller-profile-page/refs/fiverr-thomas-sidebar.webp" alt="Fiverr Thomas Andrean profile"/>
+        <div class="meta"><b>Fiverr — sidebar identity + gigs grid</b><span>Sticky profile card (level, online, ★4.9 248, Contact + Get a Quote, response/delivery) beside the gigs grid. Our spine.</span><br/><a href="https://mobbin.com/screens/c81bf6e2-86cd-49fe-a98a-7c4574cb8ddb" target="_blank">View on Mobbin →</a></div></div>
+      <div class="ref"><img src="docs/research/seller-profile-page/refs/fiverr-digis-reviews.webp" alt="Fiverr Digis reviews"/>
+        <div class="meta"><b>Fiverr — review breakdown + sub-scores</b><span>Rating breakdown with communication / quality / value sub-scores, search + sort. Steal for our reviews band.</span><br/><a href="https://mobbin.com/screens/17360731-a013-4a0c-a105-e931897da13d" target="_blank">View on Mobbin →</a></div></div>
+    </div>
+  </section>
+
+  <!-- R4 — UPWORK -->
+  <section class="slide">
+    <p class="kicker">Direct competitor · Upwork</p>
+    <h2>The trust-quantification champion.</h2>
+    <div class="refgrid r2">
+      <div class="ref"><img src="docs/research/seller-profile-page/refs/upwork-kateryna-trust.webp" alt="Upwork Kateryna trust stats"/>
+        <div class="meta"><b>Upwork — quantified trust cells</b><span>72% Job Success · $3K+ earnings · 6 jobs · 11 hours, then Hire / Message. This becomes our <b>.trust-stats</b> band.</span><br/><a href="https://mobbin.com/screens/2b916f95-54a1-4b05-9c6f-5219885f2162" target="_blank">View on Mobbin →</a></div></div>
+      <div class="ref"><img src="docs/research/seller-profile-page/refs/upwork-saml-catalog.webp" alt="Upwork project catalog"/>
+        <div class="meta"><b>Upwork — productized "Project catalog"</b><span>Predefined services "From $5 · 1 day delivery" — ties a profile straight to packages.</span><br/><a href="https://mobbin.com/screens/be7124e5-5ffa-4ad6-94c4-547f76c60acc" target="_blank">View on Mobbin →</a></div></div>
+    </div>
+  </section>
+
+  <!-- R5 — BEHANCE -->
+  <section class="slide">
+    <p class="kicker">Aspirational · Behance</p>
+    <h2>Why portfolio goes <span class="accent">first.</span></h2>
+    <div class="refgrid r2">
+      <div class="ref"><img src="docs/research/seller-profile-page/refs/behance-miseries-cover.webp" alt="Behance cover banner profile"/>
+        <div class="meta"><b>Behance — cover-banner hero + work grid</b><span>Full-bleed cover, Follow/Message, appreciations grid. The work IS the hero — the argument for proof-first.</span><br/><a href="https://mobbin.com/screens/ad341c6c-60eb-4951-ae44-6896bac757dd" target="_blank">View on Mobbin →</a></div></div>
+      <div class="ref"><img src="docs/research/seller-profile-page/refs/behance-saml-hire.webp" alt="Behance hire card"/>
+        <div class="meta"><b>Behance — availability-typed Hire card</b><span>Full-time / Freelance with availability + Work·Services·Appreciations tabs + "From $10" tiles.</span><br/><a href="https://mobbin.com/screens/bf8bc08e-bf8a-4875-acd8-e43d7dd60705" target="_blank">View on Mobbin →</a></div></div>
+    </div>
+  </section>
+
+  <!-- R6 — REVIEWS -->
+  <section class="slide">
+    <p class="kicker">Pattern · reviews with breakdown</p>
+    <h2>Make 612 reviews legible.</h2>
+    <div class="refgrid r3">
+      <div class="ref"><img src="docs/research/seller-profile-page/refs/turo-subscores.webp" alt="Turo sub-score bars"/>
+        <div class="meta"><b>Turo — sub-score bars</b><span>4.93★ broken into 5 dimensions. Cleanest breakdown.</span><br/><a href="https://mobbin.com/screens/19b0f375-24c1-43a7-97ed-8e70a07195f4" target="_blank">Mobbin →</a></div></div>
+      <div class="ref"><img src="docs/research/seller-profile-page/refs/skillshare-themes.webp" alt="Skillshare review themes"/>
+        <div class="meta"><b>Skillshare — "Most Liked" theme chips</b><span>Human version of our AI digest — themes as chips.</span><br/><a href="https://mobbin.com/screens/b89a7689-03bd-485e-97cb-540a1aeea885" target="_blank">Mobbin →</a></div></div>
+      <div class="ref"><img src="docs/research/seller-profile-page/refs/indeed-reviews.webp" alt="Indeed reviews"/>
+        <div class="meta"><b>Indeed — distribution + topic filters</b><span>Overall + star distribution + filter-by-topic chips.</span><br/><a href="https://mobbin.com/screens/7bec37db-3d44-45c4-926c-83f4de2e74ce" target="_blank">Mobbin →</a></div></div>
+    </div>
+  </section>
+
+  <!-- R7 — AI -->
+  <section class="slide">
+    <p class="kicker">Pattern · the AI layer (our differentiator)</p>
+    <h2>Nobody in the set does this on a profile.</h2>
+    <div class="refgrid r3">
+      <div class="ref"><img src="docs/research/seller-profile-page/refs/notion-ai-summary.webp" alt="Notion AI summary"/>
+        <div class="meta"><b>Notion AI — synthesized answer card</b><span>Bulleted evidence per item → our fit-summary &amp; digest.</span><br/><a href="https://mobbin.com/screens/fe636b00-83ba-4864-82ed-02cfb03d40fc" target="_blank">Mobbin →</a></div></div>
+      <div class="ref"><img src="docs/research/seller-profile-page/refs/linear-explain.webp" alt="Linear explain panel"/>
+        <div class="meta"><b>Linear — "Explain" side panel</b><span>Summary + a number + a reply box. Bet 1 layout.</span><br/><a href="https://mobbin.com/screens/51c2bd60-f22d-4879-8c28-c5800ac1f4b6" target="_blank">Mobbin →</a></div></div>
+      <div class="ref"><img src="docs/research/seller-profile-page/refs/manychat-ask-sources.webp" alt="ManyChat ask with sources"/>
+        <div class="meta"><b>ManyChat — ask + grounded sources</b><span>"AI will use this content" → our ask-seller concierge.</span><br/><a href="https://mobbin.com/screens/1c5024b5-492c-44aa-9bc5-2f7e83c25a01" target="_blank">Mobbin →</a></div></div>
+    </div>
+    <p class="lead muted" style="margin-top:16px">Lesson from Indeed's AI skills (Approve/Reject): <span class="ink">label generated content + let the buyer verify sources.</span></p>
+  </section>
+
+  <!-- R8 — MOBILE -->
+  <section class="slide">
+    <p class="kicker">Pattern · mobile (for the mobile mockup)</p>
+    <h2>The mobile blueprint.</h2>
+    <div class="refgrid r3">
+      <div class="ref"><img src="docs/research/seller-profile-page/refs/whatnot-mobile-profile.webp" alt="Whatnot mobile profile"/>
+        <div class="meta"><b>Whatnot — stat cards + tab bar</b><span>3 stat cards + Follow/Message + horizontal tabs over content. Our mobile IA.</span><br/><a href="https://mobbin.com/screens/6794dbfe-2b88-489c-93e7-5b4d303b3f28" target="_blank">Mobbin →</a></div></div>
+      <div class="ref"><img src="docs/research/seller-profile-page/refs/chatgpt-gpt-profile.webp" alt="ChatGPT GPT profile"/>
+        <div class="meta"><b>ChatGPT — GPT profile</b><span>Stat row + "Conversation starters" chips + Capabilities + sticky Start Chat. Our AI concierge.</span><br/><a href="https://mobbin.com/screens/3e72ba73-5236-4090-952c-5e1c818d4fbe" target="_blank">Mobbin →</a></div></div>
+      <div class="ref"><img src="docs/research/seller-profile-page/refs/blablacar-trust.webp" alt="BlaBlaCar trust profile"/>
+        <div class="meta"><b>BlaBlaCar — trust checklist + sticky CTA</b><span>Verified checklist + sticky "Request to book".</span><br/><a href="https://mobbin.com/screens/97847cb0-736b-4916-ba76-8e61581222d1" target="_blank">Mobbin →</a></div></div>
+    </div>
+  </section>
+
+  <!-- R9 — OPPORTUNITY MAP -->
+  <section class="slide">
+    <p class="kicker">Opportunity map · ranked, with system-fit</p>
+    <h2>Where we win.</h2>
+    <div class="strip">
+      <div class="row aiRow"><div class="n">1</div><div class="b">AI fit-summary ⭐</div><div class="w">Invent · highest differentiation, pattern proven (Notion/Linear).</div></div>
+      <div class="row"><div class="n">2</div><div class="b">Quantified trust bar</div><div class="w">Extend .seller-meta-card → .trust-stats · easy win, data exists.</div></div>
+      <div class="row"><div class="n">3</div><div class="b">Proof-first portfolio hero</div><div class="w">Reuse .lc-section higher up · fits an illustrator.</div></div>
+      <div class="row"><div class="n">4</div><div class="b">Review breakdown + theme chips + AI digest</div><div class="w">Turo bars + Skillshare chips + our digest.</div></div>
+      <div class="row aiRow"><div class="n">5</div><div class="b">Ask-seller concierge</div><div class="w">Invent .ask-seller · softens the reply-time gap.</div></div>
+      <div class="row"><div class="n">6</div><div class="b">Cover-banner hero · productized service tiles</div><div class="w">Behance polish + reuse .box service.</div></div>
+    </div>
+  </section>
+
+  <!-- R10 — CONCEPTS / NEXT -->
+  <section class="slide">
+    <p class="kicker">What this means · concepts → build</p>
+    <h2>From references to <span class="accent">concrete concepts.</span></h2>
+    <div class="grid g3">
+      <div class="card"><h3>Reuse</h3><p>Sidebar identity · gigs grid · gallery + chips · skills tags · review rows · buttons · ai_glow.</p></div>
+      <div class="card"><h3>Extend</h3><p>.profile-hero (+cover) · .trust-stats · .review-breakdown · .profile-sticky-cta · .related-sellers.</p></div>
+      <div class="card ai"><h3>Invent</h3><p>.ai-fit-summary · .ai-review-digest · .ask-seller — the AI layer.</p></div>
+    </div>
+    <p class="lead" style="margin-top:20px">Verdict: research <span class="ink">confirms</span> the PM hypothesis — proof-first, one headline metric, sticky single CTA. Next → <span class="accent">senior-product-designer</span> builds the screens. Drop the green every reference leans on — ours is ink-on-white.</p>
+  </section>
+
+  <!-- CHAPTER 3 COVER -->
+  <section class="slide divider research" data-sec="Senior Design" data-ch="3" data-chtitle="Senior Design">
+    <p class="part">Chapter 03</p>
+    <div class="chnum">03</div>
+    <h1>Senior Product Design</h1>
+    <p class="lead">Ground in the product, decide every element with <span class="ink">Use → Compose → Extend → Invent</span>, then execute the whole thing — states, a11y, motion. The <span class="ink">build</span>.</p>
+    <div class="chmeta"><span class="pill">The method</span><span class="pill">Key decisions</span><span class="pill">DS impact</span><span class="pill">Live build</span></div>
+  </section>
+
+  <!-- S1 — METHOD -->
+  <section class="slide">
+    <p class="kicker">The senior method · a conductor, grounded in the repo</p>
+    <h2>Three layers — never design in a vacuum.</h2>
+    <div class="grid g3">
+      <div class="card"><h3>1 · Know the product</h3><p>Loaded <b>DESIGN_CONTEXT.md</b> + the Penta DS skills. Context read: monochrome web marketplace, WCAG AA, DS <b>CONNECTED</b> → reuse-first.</p></div>
+      <div class="card"><h3>2 · DS decision gate</h3><p>Every element passed <b>Use → Compose → Extend → Invent</b>. Invent only where nothing fit — the AI layer (you cleared "be bold").</p></div>
+      <div class="card"><h3>3 · Senior execution</h3><p>ui-ux-pro-max (correctness/a11y) + taste pass — all states, the flow, motion, real copy. Not the happy path only.</p></div>
+    </div>
+    <p class="lead muted" style="margin-top:20px">Taste guidance was subordinated to the product: high-end-visual-design bans Helvetica &amp; 1px borders — but those <span class="ink">are</span> Penta. Authority order: <span class="ink">product → accessibility → taste.</span></p>
+  </section>
+
+  <!-- S2 — DECISIONS -->
+  <section class="slide">
+    <p class="kicker">Key design decisions · the why</p>
+    <h2>Six calls that shaped the page.</h2>
+    <div class="strip">
+      <div class="row"><div class="n">1</div><div class="b">Proof-first IA, realized</div><div class="w">Hero → trust bar → AI → portfolio → about → services → reviews → related.</div></div>
+      <div class="row"><div class="n">2</div><div class="b">Cover heavy-blurred to monochrome</div><div class="w">Behance-style banner, but abstract — no stock text, on-brand ink.</div></div>
+      <div class="row"><div class="n">3</div><div class="b">One headline metric + count-up trust bar</div><div class="w">"40+ countries · 8+ yrs · 612" — Upwork's quantified trust, Penta-styled.</div></div>
+      <div class="row aiRow"><div class="n">4</div><div class="b">AI fit-summary with thinking → verdict → package</div><div class="w">Notion/Linear card pattern; labeled "AI summary · see sources".</div></div>
+      <div class="row"><div class="n">5</div><div class="b">Portfolio: grayscale → color on hover</div><div class="w">Editorial monochrome that unifies + pops; reuses the halo language.</div></div>
+      <div class="row"><div class="n">6</div><div class="b">Sticky single Contact rail</div><div class="w">One conversion path always visible; "Most popular $85" teaser to the gig.</div></div>
+    </div>
+  </section>
+
+  <!-- S3 — DESIGN SYSTEM IMPACT -->
+  <section class="slide">
+    <p class="kicker">Design System Impact · update &amp; tell them</p>
+    <h2>Reuse → Extend → Invent (flagged back).</h2>
+    <div class="grid g3">
+      <div class="card"><h3>Reuse as-is</h3><p>Macan + ink tokens · <b>.button</b> (+border) · seller name/badge/level dots · stars · meta grid · bio · gig cards · skills tags · header/footer/categories · Penta easing &amp; durations.</p></div>
+      <div class="card"><h3>Extend <span class="muted">(DS language)</span></h3><p><b>.profile-hero</b> (+cover) · <b>.trust-stats</b> · <b>.review-breakdown</b> + sub-scores · <b>.profile-sticky-cta</b> · <b>.related-sellers</b> · gallery filter <b>chip</b>. Proposed back.</p></div>
+      <div class="card ai"><h3>Invent <span class="muted">(AI layer, flagged)</span></h3><p><b>.aifit</b> (is-this-seller-right-for-me) · <b>.ai-review-digest</b> · AI <b>thinking</b> skeleton. New DS pattern: the <b>AI surface</b> (gradient hairline + ✦ + "see sources").</p></div>
+    </div>
+    <p class="lead muted" style="margin-top:20px">Nothing invented silently. The three AI components + five extensions are written up in <span class="ink">docs/specs/seller-profile-page.md</span> to adopt into Penta.</p>
+  </section>
+
+  <!-- S4 — RIGOR -->
+  <section class="slide">
+    <p class="kicker">Senior rigor · not just the happy path</p>
+    <h2>States, access, motion.</h2>
+    <div class="grid g3">
+      <div class="card"><h3>All states</h3><p>Default · <b>AI idle → thinking (skeleton) → result → labeled source</b> · review filter empty · portfolio empty · online/offline · hover/focus/active/disabled.</p></div>
+      <div class="card"><h3>Accessibility (AA)</h3><p>Ink 15:1 contrast · visible focus rings · aria-labels on icon buttons · <b>aria-live</b> on the AI result · keyboard lightbox (Esc) · sequential headings · tabular figures.</p></div>
+      <div class="card"><h3>Motion (Penta)</h3><p>Scroll-reveal &amp; count-up (enter ~600ms, <b>--ease-penta</b>) · grayscale→color hover · transform/opacity only · <b>respects prefers-reduced-motion</b> + a visibility safety net.</p></div>
+    </div>
+  </section>
+
+  <!-- S5 — LIVE RESULT -->
+  <section class="slide" data-live="1">
+    <p class="kicker">The build · live</p>
+    <h2 style="margin-bottom:14px">From "clicking Tommy goes nowhere" → <span class="accent">this.</span></h2>
+    <div style="display:flex;gap:28px;align-items:flex-start;flex-wrap:wrap;">
+      <div style="flex:1;min-width:300px;border:1px solid var(--line);border-radius:14px;overflow:hidden;box-shadow:0 16px 50px rgba(20,20,40,.12);background:#fff;">
+        <div style="height:30px;background:#f4f4f5;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:6px;padding:0 12px;">
+          <span style="width:10px;height:10px;border-radius:50%;background:#e4e5e7;"></span><span style="width:10px;height:10px;border-radius:50%;background:#e4e5e7;"></span><span style="width:10px;height:10px;border-radius:50%;background:#e4e5e7;"></span>
+          <span style="margin-inline-start:10px;font-size:12px;color:var(--muted);">localhost / profile.html</span>
+        </div>
+        <div style="height:440px;overflow:hidden;position:relative;">
+          <iframe src="profile.html" title="Live seller profile" loading="lazy"
+            style="width:1280px;height:880px;border:0;transform:scale(.49);transform-origin:top left;"></iframe>
+        </div>
+      </div>
+      <div style="width:300px;">
+        <ul class="clean">
+          <li><b>Desktop:</b> <span class="ink">profile.html</span> — full build.</li>
+          <li><b>Mobile:</b> <span class="ink">profile-mobile.html</span> — anchored to Figma 4:944.</li>
+          <li>Wired into the gig: clicking <b>Tommy Frank</b> now lands here.</li>
+        </ul>
+        <p class="lead muted" style="font-size:15px;margin-top:14px">Next → propose the AI surface + 5 extensions back into the Penta design system.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CLOSING -->
+  <section class="slide" data-sec="Wrap-up">
+    <div class="two" style="grid-template-columns:1.05fr .95fr;">
+      <div>
+        <p class="kicker">Wrap-up · what we shipped</p>
+        <h2>From a dead-end click to a <span class="accent">complete, on-brand profile.</span></h2>
+        <ul class="clean">
+          <li><b>Desktop + mobile</b> seller profile, wired into the gig.</li>
+          <li>Proof-first IA, quantified trust, and a working <b>AI fit-summary</b>.</li>
+          <li>≥70% design-system reuse — every extension flagged back.</li>
+        </ul>
+        <div class="pills">
+          <span class="pill k">profile.html</span><span class="pill k">profile-mobile.html</span><span class="pill">→ propose the AI surface to the DS</span>
+        </div>
+      </div>
+      <div class="pvf" aria-hidden="true">
+        <div class="bar"><i></i><i></i><i></i><span>profile.html</span></div>
+        <div class="vp" style="height:360px;"><iframe src="profile.html" title="Final profile" loading="lazy" style="width:1280px;height:900px;transform:scale(.42);"></iframe></div>
+      </div>
+    </div>
+    <p class="lead" style="margin-top:20px;font-size:16px"><span class="ink">Thank you.</span> Questions? — press <span class="ink">O</span> to jump to any slide.</p>
+  </section>
+
+  <!-- chrome -->
+  <nav class="chrail" id="chrail" aria-label="Chapters"></nav>
+  <div class="deck-tools">
+    <button id="ovBtn" aria-label="Slide overview" title="Overview (press O)"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg></button>
+  </div>
+  <div class="deck-dots" id="dots"></div>
+  <div class="deck-nav"><button id="prev" aria-label="Previous slide">‹</button><button id="next" aria-label="Next slide">›</button></div>
+
+  <!-- overview overlay -->
+  <div class="ov" id="ov" role="dialog" aria-modal="true" aria-label="Slide overview">
+    <div class="ov-h"><h3>All slides</h3><span id="ovSub"></span><button class="x" id="ovClose" aria-label="Close overview">✕</button></div>
+    <div class="ov-grid" id="ovGrid"></div>
+  </div>
+
+  <script>
+  (function(){
+    var slides=[].slice.call(document.querySelectorAll('.slide'));
+    var dotsWrap=document.getElementById('dots');
+    var bar=document.getElementById('bar'), cur=document.getElementById('cur'), tot=document.getElementById('tot'), sec=document.getElementById('sec');
+    var chrail=document.getElementById('chrail');
+    var ov=document.getElementById('ov'), ovGrid=document.getElementById('ovGrid'), ovSub=document.getElementById('ovSub');
+    var i=0; tot.textContent=slides.length;
+
+    /* chapters from cover slides */
+    var chapters=[]; slides.forEach(function(s,k){ if(s.dataset.ch){ chapters.push({n:s.dataset.ch,title:s.dataset.chtitle||('Chapter '+s.dataset.ch),idx:k}); } });
+
+    /* dots */
+    slides.forEach(function(_,k){var d=document.createElement('i');d.addEventListener('click',function(){go(k);});dotsWrap.appendChild(d);});
+    var dots=[].slice.call(dotsWrap.children);
+
+    /* chapter rail */
+    chapters.forEach(function(ch){ var b=document.createElement('button');
+      b.innerHTML='<span class="num">'+(ch.n.length<2?'0'+ch.n:ch.n)+'</span><span class="lbl">'+ch.title+'</span>';
+      b.addEventListener('click',function(){ go(ch.idx); this.blur(); }); chrail.appendChild(b); });
+    var railBtns=[].slice.call(chrail.children);
+
+    function sectionFor(n){ for(var k=n;k>=0;k--){ if(slides[k].dataset.sec) return slides[k].dataset.sec; } return 'Overview'; }
+    function chapterFor(n){ var c=0; for(var k=0;k<chapters.length;k++){ if(chapters[k].idx<=n) c=k+1; } return c; }
+
+    /* overview grid */
+    function slideTitle(s){ var h=s.querySelector('h1,h2'); if(h) return h.textContent.trim().slice(0,70); var k=s.querySelector('.kicker'); return k?k.textContent.trim():'Slide'; }
+    slides.forEach(function(s,k){ var c=document.createElement('button'); c.className='ov-card'+(s.classList.contains('divider')?' dv':'');
+      c.innerHTML='<div class="n">'+(k+1<10?'0'+(k+1):(k+1))+' / '+slides.length+'</div><div class="t">'+slideTitle(s)+'</div>'+(s.dataset.ch?'<div class="ch">Chapter '+s.dataset.ch+'</div>':'');
+      c.addEventListener('click',function(){ go(k); closeOv(); }); ovGrid.appendChild(c); });
+    var ovCards=[].slice.call(ovGrid.children);
+    function openOv(){ ov.classList.add('open'); ovSub.textContent=slides.length+' slides · '+chapters.length+' chapters'; ovCards.forEach(function(c,k){c.classList.toggle('on',k===i);}); }
+    function closeOv(){ ov.classList.remove('open'); }
+    document.getElementById('ovBtn').addEventListener('click',function(){ ov.classList.contains('open')?closeOv():openOv(); this.blur(); });
+    document.getElementById('ovClose').addEventListener('click',closeOv);
+
+    function go(n){
+      i=Math.max(0,Math.min(slides.length-1,n));
+      slides.forEach(function(s,k){s.classList.toggle('on',k===i);});
+      dots.forEach(function(d,k){d.classList.toggle('on',k===i);});
+      ovCards.forEach(function(c,k){c.classList.toggle('on',k===i);});
+      bar.style.width=((i)/(slides.length-1)*100)+'%';
+      cur.textContent=i+1;
+      if(sec) sec.textContent=sectionFor(i);
+      var ch=chapterFor(i); railBtns.forEach(function(b,k){b.classList.toggle('on',k===ch-1);});
+    }
+    document.getElementById('next').addEventListener('click',function(){go(i+1);this.blur();});
+    document.getElementById('prev').addEventListener('click',function(){go(i-1);this.blur();});
+
+    /* agenda / chapter jump tiles */
+    document.querySelectorAll('[data-goch]').forEach(function(el){ el.addEventListener('click',function(){ var c=+el.dataset.goch; if(chapters[c-1]) go(chapters[c-1].idx); }); });
+
+    document.addEventListener('keydown',function(e){
+      if(ov.classList.contains('open')){ if(e.key==='Escape'||e.key==='o'||e.key==='O') closeOv(); return; }
+      if(e.key==='ArrowRight'||e.key==='PageDown'){e.preventDefault();go(i+1);}
+      else if(e.key===' '){ if(e.target.tagName==='BUTTON')return; e.preventDefault();go(i+1);}
+      else if(e.key==='ArrowLeft'||e.key==='PageUp'){e.preventDefault();go(i-1);}
+      else if(e.key==='Home'){go(0);} else if(e.key==='End'){go(slides.length-1);}
+      else if(e.key==='o'||e.key==='O'){openOv();}
+      else if(e.key==='1'&&chapters[0]){go(chapters[0].idx);}
+      else if(e.key==='2'&&chapters[1]){go(chapters[1].idx);}
+      else if(e.key==='3'&&chapters[2]){go(chapters[2].idx);}
+    });
+    go(0);
+  })();
+  </script>
+</body>
+</html>

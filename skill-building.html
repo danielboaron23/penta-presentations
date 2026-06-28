@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Building Skills — Penta PM &amp; Design Research</title>
+  <link rel="preload" href="https://npm-assets.fiverrcdn.com/assets/uploads/macan-bold.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="https://npm-assets.fiverrcdn.com/assets/uploads/macan-regular.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="stylesheet" href="design-system/tokens.css" />
+  <link rel="stylesheet" href="design-system/styles.css" />
+  <style>
+    :root{
+      --ink:var(--grey-1200); --body:var(--grey-1100); --muted:var(--grey-1000);
+      --faint:var(--grey-800); --border:var(--grey-400); --divide:var(--grey-300); --paper:var(--white);
+    }
+    html,body{height:100%;}
+    body{margin:0;font-family:'Macan','Helvetica Neue',Helvetica,Arial,sans-serif;color:var(--body);
+      background:radial-gradient(120% 120% at 100% 0%,#fafafa 0%,#fff 55%);-webkit-font-smoothing:antialiased;overflow:hidden;}
+    .deck{position:fixed;inset:0;}
+    .deck-progress{position:fixed;top:0;inset-inline:0;height:3px;background:var(--divide);z-index:20;}
+    .deck-progress>i{display:block;height:100%;width:0;background:var(--ink);transition:width .4s var(--ease-out,cubic-bezier(.16,1,.3,1));}
+    .deck-brand{position:fixed;top:22px;inset-inline-end:32px;z-index:20;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--faint);display:flex;align-items:center;gap:8px;}
+    .deck-brand b{color:var(--ink);font-weight:600;letter-spacing:0;text-transform:none;}
+    .deck-dot{width:7px;height:7px;border-radius:50%;background:var(--ink);}
+    .slide{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;padding:clamp(40px,7vw,110px);box-sizing:border-box;
+      opacity:0;visibility:hidden;transform:translateY(14px);
+      transition:opacity .6s var(--ease-out,cubic-bezier(.16,1,.3,1)),transform .6s var(--ease-out,cubic-bezier(.16,1,.3,1)),visibility 0s linear .6s;}
+    .slide.is-active{opacity:1;visibility:visible;transform:none;transition:opacity .6s var(--ease-out,cubic-bezier(.16,1,.3,1)),transform .6s var(--ease-out,cubic-bezier(.16,1,.3,1));}
+    .slide.is-active [data-stagger]{animation:rise .6s var(--ease-out,cubic-bezier(.16,1,.3,1)) both;}
+    .slide.is-active [data-stagger="1"]{animation-delay:80ms;} .slide.is-active [data-stagger="2"]{animation-delay:160ms;}
+    .slide.is-active [data-stagger="3"]{animation-delay:240ms;} .slide.is-active [data-stagger="4"]{animation-delay:320ms;}
+    .slide.is-active [data-stagger="5"]{animation-delay:400ms;} .slide.is-active [data-stagger="6"]{animation-delay:480ms;}
+    @keyframes rise{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:none;}}
+    .wrap{width:100%;max-width:1060px;margin-inline:auto;}
+    .eyebrow{font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);margin:0 0 18px;}
+    .eyebrow .num{color:var(--ink);font-weight:600;}
+    h1.title{font-family:'Macan';font-weight:700;color:var(--ink);font-size:clamp(40px,6.2vw,84px);line-height:1.02;letter-spacing:-.02em;margin:0 0 22px;}
+    h2.head{font-family:'Macan';font-weight:700;color:var(--ink);font-size:clamp(30px,4.4vw,54px);line-height:1.05;letter-spacing:-.015em;margin:0 0 24px;}
+    .lead{font-size:clamp(17px,1.5vw,21px);line-height:1.55;color:var(--body);max-width:64ch;margin:0;}
+    .sub{font-size:14px;color:var(--muted);}
+    .rule{height:1px;background:var(--divide);border:0;margin:28px 0;}
+    .cards{display:grid;gap:18px;margin-top:8px;}
+    .cards.cols-3{grid-template-columns:repeat(3,1fr);} .cards.cols-2{grid-template-columns:repeat(2,1fr);}
+    .card{background:var(--paper);border:1px solid var(--border);border-radius:16px;padding:22px 20px;transition:transform .32s var(--ease-out),border-color .32s var(--ease-out);}
+    .card:hover{transform:translateY(-3px);border-color:var(--grey-600);}
+    .card .k{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);margin:0 0 10px;}
+    .card h3{font-family:'Macan';font-weight:600;color:var(--ink);font-size:18px;margin:0 0 8px;}
+    .card p{font-size:14px;line-height:1.5;color:var(--muted);margin:0;}
+    .card code{font-family:ui-monospace,Menlo,monospace;font-size:12.5px;color:var(--ink);background:var(--grey-200);border:1px solid var(--border);border-radius:5px;padding:1px 5px;}
+    .note-strip{margin-top:22px;font-size:14.5px;color:var(--body);border-inline-start:3px solid var(--ink);padding-inline-start:14px;}
+    /* prompt card (verbatim) */
+    .prompt-card{border:1px solid var(--border);border-radius:16px;overflow:hidden;background:var(--paper);margin-top:8px;}
+    .pc-top{display:flex;align-items:center;gap:9px;padding:12px 18px;border-bottom:1px solid var(--divide);background:var(--grey-100);}
+    .pc-avatar{width:22px;height:22px;border-radius:50%;background:var(--ink);color:#fff;display:grid;place-items:center;font-size:11px;font-weight:600;}
+    .pc-who{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);}
+    .pc-who .cmd{font-family:ui-monospace,Menlo,monospace;letter-spacing:0;text-transform:none;color:var(--ink);background:var(--grey-200);border:1px solid var(--border);border-radius:5px;padding:1px 6px;margin-inline-start:8px;}
+    .pc-body{padding:20px 20px;font-size:16px;line-height:1.6;color:var(--ink);}
+    .pc-body .lnk{color:var(--muted);font-family:ui-monospace,Menlo,monospace;font-size:13px;}
+    /* process steps (vertical) */
+    .steps{display:grid;gap:12px;margin-top:6px;}
+    .steprow{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:start;}
+    .steprow .n{flex:none;width:28px;height:28px;border-radius:50%;background:var(--ink);color:#fff;display:grid;place-items:center;font-family:'Macan';font-weight:700;font-size:13px;}
+    .steprow .t{font-family:'Macan';font-weight:600;color:var(--ink);font-size:16px;margin:2px 0 0;}
+    .steprow .d{font-size:13.5px;color:var(--muted);margin:2px 0 0;}
+    .steprow code{font-family:ui-monospace,Menlo,monospace;font-size:12px;color:var(--ink);background:var(--grey-200);border:1px solid var(--border);border-radius:5px;padding:1px 5px;}
+    .tree{font-family:ui-monospace,Menlo,monospace;font-size:13.5px;line-height:1.7;color:var(--body);background:var(--grey-100);border:1px solid var(--border);border-radius:12px;padding:18px 20px;margin-top:8px;white-space:pre;overflow:auto;}
+    .pills{display:flex;gap:10px;flex-wrap:wrap;margin-top:4px;}
+    .pill{font-size:13.5px;color:var(--ink);border:1px solid var(--border);border-radius:999px;padding:8px 14px;background:var(--paper);}
+    .takeaways{list-style:none;padding:0;margin:10px 0 0;display:grid;gap:14px;}
+    .takeaways li{display:flex;gap:14px;align-items:flex-start;font-size:17px;color:var(--body);}
+    .takeaways .b{flex:none;width:26px;height:26px;border-radius:50%;background:var(--ink);color:#fff;display:grid;place-items:center;font-size:13px;}
+    .deck-nav{position:fixed;bottom:24px;inset-inline-start:32px;z-index:20;display:flex;align-items:center;gap:14px;}
+    .nav-btn{width:44px;height:44px;border-radius:50%;border:1px solid var(--border);background:var(--paper);color:var(--ink);display:grid;place-items:center;cursor:pointer;transition:border-color .32s var(--ease-out),transform .2s var(--ease-out);}
+    .nav-btn:hover{border-color:var(--ink);} .nav-btn:active{transform:scale(.94);} .nav-btn:disabled{opacity:.35;cursor:default;}
+    .nav-btn svg{width:18px;height:18px;}
+    .counter{font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums;} .counter b{color:var(--ink);}
+    .hint{position:fixed;bottom:28px;inset-inline-end:32px;z-index:20;font-size:12px;color:var(--faint);}
+    .hint kbd{font-family:inherit;border:1px solid var(--border);border-bottom-width:2px;border-radius:6px;padding:1px 7px;color:var(--muted);background:var(--paper);}
+    @media(max-width:760px){.cards.cols-3,.cards.cols-2{grid-template-columns:1fr;}.hint{display:none;}}
+    @media(prefers-reduced-motion:reduce){.slide,.slide.is-active [data-stagger],.card,.nav-btn,.deck-progress>i{transition:none!important;animation:none!important;}.slide.is-active [data-stagger]{opacity:1!important;transform:none!important;}}
+  </style>
+</head>
+<body>
+  <div class="deck-progress"><i id="bar"></i></div>
+  <div class="deck-brand"><span class="deck-dot"></span> <b>Penta&nbsp;Playground</b> · building skills</div>
+
+  <main class="deck" id="deck">
+
+    <!-- 1 — Title -->
+    <section class="slide" data-slide>
+      <div class="wrap">
+        <p class="eyebrow" data-stagger="1">Design + AI workshop · skill-building</p>
+        <h1 class="title" data-stagger="2">Building two<br>custom skills</h1>
+        <p class="lead" data-stagger="3">How I created <b>Penta PM</b> and <b>Penta Design Research</b> with <code>/skill-creator</code> — the original prompt, the clarifying questions, and the way each one was built.</p>
+        <hr class="rule" data-stagger="4" />
+        <p class="sub" data-stagger="4">The method · Penta PM · Penta Design Research · how they work together.</p>
+      </div>
+    </section>
+
+    <!-- 2 — The method -->
+    <section class="slide" data-slide>
+      <div class="wrap">
+        <p class="eyebrow" data-stagger="1">The method · <span class="cmd" style="font-family:ui-monospace,Menlo,monospace;background:var(--grey-200);border:1px solid var(--border);border-radius:5px;padding:1px 6px;color:var(--ink)">/skill-creator</span></p>
+        <h2 class="head" data-stagger="1">How a skill gets built</h2>
+        <div class="steps">
+          <div class="steprow" data-stagger="2"><span class="n">1</span><div><p class="t">Clarify</p><p class="d">A short, focused set of questions — never a wall. Stop once the intent is clear.</p></div></div>
+          <div class="steprow" data-stagger="2"><span class="n">2</span><div><p class="t">Study the source</p><p class="d">Clone the linked repo for proven patterns to distill (not copy).</p></div></div>
+          <div class="steprow" data-stagger="3"><span class="n">3</span><div><p class="t">Scaffold</p><p class="d"><code>init_skill.py</code> → SKILL.md + <code>references/</code> + <code>assets/</code>.</p></div></div>
+          <div class="steprow" data-stagger="3"><span class="n">4</span><div><p class="t">Write</p><p class="d">A lean SKILL.md (triggers + workflow) and the reusable references/assets.</p></div></div>
+          <div class="steprow" data-stagger="4"><span class="n">5</span><div><p class="t">Validate &amp; package</p><p class="d"><code>quick_validate.py</code> → <code>package_skill.py</code> → a shareable <code>.skill</code>.</p></div></div>
+          <div class="steprow" data-stagger="4"><span class="n">6</span><div><p class="t">Install</p><p class="d">Project-scoped in <code>.claude/skills/</code> of both repos, so they load automatically.</p></div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3 — Penta PM: the prompt -->
+    <section class="slide" data-slide>
+      <div class="wrap">
+        <p class="eyebrow" data-stagger="1"><span class="num">Skill 01</span> · Penta PM · the prompt</p>
+        <h2 class="head" data-stagger="1">The original prompt</h2>
+        <div class="prompt-card" data-stagger="2">
+          <div class="pc-top"><span class="pc-avatar">D</span><span class="pc-who">You typed <span class="cmd">/skill-creator</span></span></div>
+          <div class="pc-body">I want to be a product manager that will help me create specs or PRDs and help me think about new features and new screens I want to build in this product. It will be connected to the code structure, the design system, and everything in this repo. The main reason: help me characterize and make better decisions about the pages I want to create. Ask me questions to clarify my idea. This skill will live on this project.<br><span class="lnk">https://github.com/RefoundAI/lenny-skills.git</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4 — Penta PM: the way of taking (Q&A) -->
+    <section class="slide" data-slide>
+      <div class="wrap">
+        <p class="eyebrow" data-stagger="1"><span class="num">Skill 01</span> · Penta PM · the way of taking</p>
+        <h2 class="head" data-stagger="1">Clarify before building</h2>
+        <p class="lead" data-stagger="2">Three questions turned a one-paragraph idea into a precise spec:</p>
+        <div class="cards cols-3" style="margin-top:18px">
+          <div class="card" data-stagger="2"><p class="k">Q · where it lives</p><h3>Both repos</h3><p>Installed in both the Vite project and the static snapshot.</p></div>
+          <div class="card" data-stagger="3"><p class="k">Q · what it makes</p><h3>PRD + brief + mapping + handoff</h3><p>Full PRD, 1-pager brief, DS/route mapping, and a designer handoff.</p></div>
+          <div class="card" data-stagger="4"><p class="k">Q · the source</p><h3>Distill lenny-skills</h3><p>PM frameworks condensed into <code>references/</code>, with credit.</p></div>
+        </div>
+        <p class="note-strip" data-stagger="5">Added later from feedback: the PM must <b>take a POV and direct the research</b> — not hand off a thin brief.</p>
+      </div>
+    </section>
+
+    <!-- 5 — Penta PM: result -->
+    <section class="slide" data-slide>
+      <div class="wrap">
+        <p class="eyebrow" data-stagger="1"><span class="num">Skill 01</span> · Penta PM · the result</p>
+        <h2 class="head" data-stagger="1">What it became</h2>
+        <div class="cards cols-2" style="align-items:start">
+          <div data-stagger="2">
+            <div class="tree">penta-pm/
+├─ SKILL.md
+├─ references/
+│  ├─ repo-map.md
+│  ├─ frameworks.md
+│  └─ notion-tasks.md
+└─ assets/
+   ├─ prd-template.md
+   └─ brief-1pager.md</div>
+          </div>
+          <div data-stagger="3">
+            <p class="lead" style="font-size:17px">A PM grounded in <b>this repo</b> — reads the design system, writes PRDs to <code>docs/specs/</code>, and (later) reads/creates tasks on the <b>Notion</b> board.</p>
+            <div class="pills" style="margin-top:18px">
+              <span class="pill">Reuse-first</span><span class="pill">Measurable success criteria</span><span class="pill">Notion read/write</span><span class="pill">Feeds the designer</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6 — Design Research: the prompt -->
+    <section class="slide" data-slide>
+      <div class="wrap">
+        <p class="eyebrow" data-stagger="1"><span class="num">Skill 02</span> · Penta Design Research · the prompt</p>
+        <h2 class="head" data-stagger="1">The original prompt</h2>
+        <div class="prompt-card" data-stagger="2">
+          <div class="pc-top"><span class="pc-avatar">D</span><span class="pc-who">You typed <span class="cmd">/skill-creator</span></span></div>
+          <div class="pc-body">create design research that sees how our competitors design the features we want to build. It will connect to the Mobbin MCP and get real references. Its "brain" comes from a competitive-analyst agent. It will deliver HTML slides + attach the Mobbin references, so we can paste them into the presentation and into Figma. Ask me questions to make it better.<br><span class="lnk">https://github.com/Owl-Listener/designer-skills.git</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 7 — Design Research: way of taking -->
+    <section class="slide" data-slide>
+      <div class="wrap">
+        <p class="eyebrow" data-stagger="1"><span class="num">Skill 02</span> · Penta Design Research · the way of taking</p>
+        <h2 class="head" data-stagger="1">Clarify before building</h2>
+        <div class="cards cols-3" style="margin-top:6px">
+          <div class="card" data-stagger="2"><p class="k">Q · platform</p><h3>Web</h3><p>Search Mobbin for web screens, flows, and sections.</p></div>
+          <div class="card" data-stagger="3"><p class="k">Q · the "brain"</p><h3>Embed the framework</h3><p>Distill the competitive-analysis method into <code>references/</code>.</p></div>
+          <div class="card" data-stagger="4"><p class="k">Q · Figma handoff</p><h3>Local images + links</h3><p>Save screenshots locally and keep every <code>mobbin_url</code>.</p></div>
+        </div>
+        <p class="note-strip" data-stagger="5">Source: <b>designer-skills</b> — the <code>competitive-analysis</code> + <code>presentation-deck</code> skills, distilled and credited.</p>
+      </div>
+    </section>
+
+    <!-- 8 — Design Research: result -->
+    <section class="slide" data-slide>
+      <div class="wrap">
+        <p class="eyebrow" data-stagger="1"><span class="num">Skill 02</span> · Penta Design Research · the result</p>
+        <h2 class="head" data-stagger="1">What it became</h2>
+        <div class="cards cols-2" style="align-items:start">
+          <div data-stagger="2">
+            <div class="tree">penta-design-research/
+├─ SKILL.md
+├─ references/
+│  ├─ competitive-analysis.md
+│  └─ mobbin-and-slides.md
+└─ assets/
+   └─ slide-template.html</div>
+          </div>
+          <div data-stagger="3">
+            <p class="lead" style="font-size:17px">Pulls <b>real Mobbin references</b>, analyzes them with the framework, and delivers an <b>HTML deck + a reference pack</b> (local screenshots + links) ready for the presentation and Figma.</p>
+            <div class="pills" style="margin-top:18px">
+              <span class="pill">Mobbin MCP</span><span class="pill">Comparison matrix</span><span class="pill">Opportunity map</span><span class="pill">Cite every source</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 9 — How they connect -->
+    <section class="slide" data-slide>
+      <div class="wrap">
+        <p class="eyebrow" data-stagger="1">Together</p>
+        <h2 class="head" data-stagger="1">One pipeline, three skills</h2>
+        <p class="lead" data-stagger="2">The two skills weren't built in isolation — each hands off to the next.</p>
+        <div class="cards cols-3" style="margin-top:24px">
+          <div class="card" data-stagger="2"><p class="k">Define</p><h3>Penta PM</h3><p>Problem, POV, success bar, and a research direction.</p></div>
+          <div class="card" data-stagger="3"><p class="k">Evidence</p><h3>Penta Design Research</h3><p>Real references + a verdict that confirms or revises the POV.</p></div>
+          <div class="card" data-stagger="4"><p class="k">Build</p><h3>senior-product-designer</h3><p>The UI, grounded in the design system.</p></div>
+        </div>
+        <p class="note-strip" data-stagger="5">Proven on <b>GIG-2 (the gallery)</b> end-to-end.</p>
+      </div>
+    </section>
+
+    <!-- 10 — Takeaways -->
+    <section class="slide" data-slide>
+      <div class="wrap">
+        <p class="eyebrow" data-stagger="1">For the workshop</p>
+        <h2 class="head" data-stagger="1">What to take from this</h2>
+        <ul class="takeaways">
+          <li data-stagger="2"><span class="b">1</span><span>A good skill starts with a <b>plain-language prompt</b> + a <b>source to learn from</b> — not a perfect spec.</span></li>
+          <li data-stagger="3"><span class="b">2</span><span><b>Clarify first.</b> A few sharp questions turn an idea into a precise, useful skill.</span></li>
+          <li data-stagger="4"><span class="b">3</span><span><b>Distill, don't copy.</b> Condense proven frameworks into <code>references/</code>, with credit.</span></li>
+          <li data-stagger="5"><span class="b">4</span><span>Make skills <b>project-grounded</b> — connected to the code, the design system, Notion, and Mobbin.</span></li>
+        </ul>
+      </div>
+    </section>
+
+  </main>
+
+  <nav class="deck-nav">
+    <button class="nav-btn" id="prev" aria-label="Previous"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 6l-6 6 6 6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+    <span class="counter"><b id="cur">1</b> / <span id="total">10</span></span>
+    <button class="nav-btn" id="next" aria-label="Next"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+  </nav>
+  <div class="hint">Navigate: <kbd>→</kbd> next · <kbd>←</kbd> prev · <kbd>Space</kbd></div>
+
+  <script>
+    (function(){
+      var slides=[].slice.call(document.querySelectorAll('[data-slide]')),i=0;
+      var bar=document.getElementById('bar'),cur=document.getElementById('cur');
+      var prevBtn=document.getElementById('prev'),nextBtn=document.getElementById('next');
+      document.getElementById('total').textContent=slides.length;
+      function render(){slides.forEach(function(s,n){s.classList.toggle('is-active',n===i);});
+        bar.style.width=(i/(slides.length-1)*100)+'%';cur.textContent=i+1;
+        prevBtn.disabled=i===0;nextBtn.disabled=i===slides.length-1;}
+      function go(n){i=Math.max(0,Math.min(slides.length-1,n));render();}
+      nextBtn.addEventListener('click',function(){go(i+1);});
+      prevBtn.addEventListener('click',function(){go(i-1);});
+      document.addEventListener('keydown',function(e){
+        if(e.key==='ArrowRight'||e.key===' '||e.key==='PageDown'){e.preventDefault();go(i+1);}
+        else if(e.key==='ArrowLeft'||e.key==='PageUp'){e.preventDefault();go(i-1);}
+        else if(e.key==='Home'){go(0);}else if(e.key==='End'){go(slides.length-1);}});
+      render();
+    })();
+  </script>
+</body>
+</html>

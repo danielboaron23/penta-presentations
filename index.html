@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Penta — Presentations</title>
+  <meta name="description" content="Penta product & design presentations — Seller Profile review and the Skill-Building story." />
+
+  <link rel="preload" href="https://npm-assets.fiverrcdn.com/assets/uploads/macan-bold.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="https://npm-assets.fiverrcdn.com/assets/uploads/macan-regular.woff2" as="font" type="font/woff2" crossorigin />
+
+  <style>
+    :root{
+      --ink:#222325; --body:#404145; --muted:#62646a; --faint:#95979d;
+      --line:#e4e5e7; --divide:#efeff0; --paper:#fff;
+      --ease-penta:cubic-bezier(.24,.48,0,.98);
+      --ai1:#7b61ff; --ai2:#3b6fff; --nav-h:60px;
+    }
+    *{box-sizing:border-box;}
+    html,body{height:100%;margin:0;}
+    body{font-family:'Macan','Helvetica Neue',Helvetica,Arial,sans-serif;color:var(--body);
+      background:#f3f3f5;-webkit-font-smoothing:antialiased;overflow:hidden;}
+
+    /* top nav bar */
+    .nav{position:fixed;top:0;inset-inline:0;height:var(--nav-h);z-index:10;display:flex;align-items:center;gap:18px;
+      padding:0 18px;background:rgba(255,255,255,.86);backdrop-filter:saturate(1.4) blur(12px);
+      border-bottom:1px solid var(--line);}
+    .brand{display:flex;align-items:center;gap:9px;font-size:14px;color:var(--faint);letter-spacing:.1em;text-transform:uppercase;font-weight:600;flex-shrink:0;}
+    .brand b{color:var(--ink);letter-spacing:0;text-transform:none;font-weight:700;font-size:16px;}
+    .brand .dot{width:8px;height:8px;border-radius:50%;background:var(--ink);}
+
+    .tabs{display:flex;gap:4px;background:#eef0f2;border:1px solid var(--line);border-radius:999px;padding:4px;}
+    .tab{border:none;background:transparent;font:inherit;font-size:14px;font-weight:600;color:var(--muted);
+      padding:9px 18px;border-radius:999px;cursor:pointer;white-space:nowrap;display:flex;align-items:center;gap:9px;
+      transition:background .25s var(--ease-penta),color .25s var(--ease-penta);}
+    .tab .n{font-variant-numeric:tabular-nums;opacity:.55;font-weight:700;}
+    .tab:hover{color:var(--ink);}
+    .tab.on{background:var(--ink);color:#fff;}
+    .tab.on .n{opacity:.7;}
+
+    .right{margin-inline-start:auto;display:flex;align-items:center;gap:14px;}
+    .hint{font-size:12.5px;color:var(--faint);}
+    .hint b{color:var(--body);font-weight:600;}
+    .open{display:inline-flex;align-items:center;gap:7px;font-size:13.5px;font-weight:600;color:var(--ink);text-decoration:none;
+      border:1px solid var(--line);background:#fff;border-radius:10px;padding:9px 14px;transition:all .25s var(--ease-penta);}
+    .open:hover{background:var(--ink);color:#fff;border-color:var(--ink);}
+    .open svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:1.8;}
+
+    /* stage */
+    .stage{position:fixed;top:var(--nav-h);inset-inline:0;bottom:0;background:#fff;}
+    .stage iframe{width:100%;height:100%;border:0;display:block;}
+    .loader{position:absolute;inset:0;display:grid;place-items:center;background:#fff;color:var(--faint);font-size:14px;
+      pointer-events:none;opacity:0;transition:opacity .3s;}
+    .loader.show{opacity:1;}
+    .loader .spin{width:22px;height:22px;border-radius:50%;border:2.5px solid var(--divide);border-top-color:var(--ink);
+      animation:spin .8s linear infinite;margin-inline-end:11px;}
+    @keyframes spin{to{transform:rotate(360deg);}}
+
+    @media(max-width:820px){
+      .brand .txt,.hint{display:none;}
+      .tab{padding:9px 13px;font-size:13px;}
+      .tab .lbl-long{display:none;}
+    }
+    @media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important;}}
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="brand"><span class="dot"></span><b>Penta</b><span class="txt">· Presentations</span></div>
+    <div class="tabs" role="tablist" aria-label="Presentations">
+      <button class="tab on" role="tab" data-deck="seller-profile-deck.html" data-key="seller">
+        <span class="n">01</span><span>Seller Profile <span class="lbl-long">Review</span></span>
+      </button>
+      <button class="tab" role="tab" data-deck="skill-building.html" data-key="skills">
+        <span class="n">02</span><span>Skill Building</span>
+      </button>
+    </div>
+    <div class="right">
+      <span class="hint">Click the deck, then use <b>← →</b></span>
+      <a class="open" id="openBtn" href="seller-profile-deck.html" target="_blank" rel="noopener">
+        Open full screen
+        <svg viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9M19 13v6a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+    </div>
+  </nav>
+
+  <div class="stage">
+    <div class="loader show" id="loader"><span class="spin"></span> Loading deck…</div>
+    <iframe id="frame" title="Presentation" src="seller-profile-deck.html"></iframe>
+  </div>
+
+  <script>
+    (function(){
+      var tabs=[].slice.call(document.querySelectorAll('.tab'));
+      var frame=document.getElementById('frame'), loader=document.getElementById('loader'), openBtn=document.getElementById('openBtn');
+      var byKey={}; tabs.forEach(function(t){byKey[t.dataset.key]=t;});
+
+      function show(tab){
+        if(!tab) return;
+        tabs.forEach(function(t){t.classList.toggle('on',t===tab); t.setAttribute('aria-selected',t===tab);});
+        var deck=tab.dataset.deck;
+        if(frame.getAttribute('src')!==deck){ loader.classList.add('show'); frame.setAttribute('src',deck); }
+        openBtn.setAttribute('href',deck);
+        if(location.hash.slice(1)!==tab.dataset.key) history.replaceState(null,'','#'+tab.dataset.key);
+        document.title='Penta — '+(tab.dataset.key==='skills'?'Skill Building':'Seller Profile Review');
+      }
+
+      tabs.forEach(function(t){ t.addEventListener('click',function(){ show(t); }); });
+      frame.addEventListener('load',function(){ loader.classList.remove('show'); });
+
+      // deep-link via hash (#seller / #skills)
+      var initial=byKey[location.hash.slice(1)];
+      if(initial && initial!==tabs[0]) show(initial); else show(tabs[0]);
+      window.addEventListener('hashchange',function(){ var t=byKey[location.hash.slice(1)]; if(t) show(t); });
+    })();
+  </script>
+</body>
+</html>
