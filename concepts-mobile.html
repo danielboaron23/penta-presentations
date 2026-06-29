@@ -154,6 +154,26 @@
     .ftr{border-top:1px solid var(--line);padding:32px 0;}
     .ftr-in{display:flex;justify-content:space-between;flex-wrap:wrap;gap:14px;align-items:center;font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);}
 
+    /* scan-to-open section */
+    .scan{padding:clamp(48px,8vw,88px) 0;border-top:1px solid var(--line);background:var(--paper);}
+    .scan-in{display:grid;grid-template-columns:1.1fr auto;gap:clamp(28px,5vw,60px);align-items:center;}
+    @media(max-width:680px){.scan-in{grid-template-columns:1fr;justify-items:center;text-align:center;}}
+    .scan h2{font-family:var(--serif);font-weight:400;font-size:clamp(28px,4.4vw,46px);line-height:1.04;margin:14px 0 0;}
+    .scan h2 em{font-style:italic;color:var(--accent);}
+    .scan p{font-size:15.5px;line-height:1.6;color:var(--body);margin:16px 0 0;max-width:44ch;}
+    .scan p b{color:var(--ink);font-weight:600;}
+    .scan .scan-cta{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:22px;}
+    @media(max-width:680px){.scan .scan-cta{justify-content:center;}}
+    .scan .url{display:inline-flex;align-items:center;gap:9px;font-family:var(--mono);font-size:12px;color:var(--body);background:var(--wash);border:1px solid var(--line);border-radius:999px;padding:10px 15px;}
+    .scan .url svg{width:14px;height:14px;stroke:var(--accent);fill:none;stroke-width:2;flex-shrink:0;}
+    .scan .open{display:inline-flex;align-items:center;gap:8px;font-size:13.5px;font-weight:600;color:#fff;background:var(--ink);border-radius:11px;padding:11px 18px;transition:background .25s;}
+    .scan .open:hover{background:#000;}
+    .scan .open svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:2;}
+    .qrcard{background:#fff;border:1px solid var(--line);border-radius:24px;padding:18px;box-shadow:0 24px 56px rgba(20,20,40,.12);width:248px;}
+    .qrcard img{width:100%;height:auto;display:block;border-radius:10px;}
+    .qrcard .ph{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:14px;font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);}
+    .qrcard .ph svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:1.7;}
+
     .rv{opacity:0;transform:translateY(22px);transition:opacity .7s var(--e2),transform .7s var(--e2);}
     .rv.in{opacity:1;transform:none;}
     @media (prefers-reduced-motion: reduce){.rv{opacity:1;transform:none;}html{scroll-behavior:auto;}}
@@ -256,6 +276,27 @@
 
     </div>
     <p class="eyebrow" style="text-align:center;margin-top:26px">Previews are live — tap a phone to open the full mobile page</p>
+  </section>
+
+  <!-- SCAN TO OPEN ON YOUR PHONE -->
+  <section class="scan">
+    <div class="wrap">
+      <div class="seclabel rv"><span class="ttl">On your phone</span><span class="ln"></span></div>
+      <div class="scan-in">
+        <div class="rv">
+          <h2>See it on <em>your</em> device.</h2>
+          <p>These are built for a phone. <b>Scan the code</b> to open the live mobile concepts on your own device — full-screen, the way they're meant to be experienced. Pick a concept and flip between all three.</p>
+          <div class="scan-cta">
+            <span class="url"><svg viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 11a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1" stroke-linecap="round" stroke-linejoin="round"/></svg>danielboaron23.github.io/penta-mobile-concepts</span>
+            <a class="open" href="https://danielboaron23.github.io/penta-mobile-concepts/" target="_blank" rel="noopener">Open the link <svg viewBox="0 0 24 24"><path d="M7 17 17 7M9 7h8v8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+          </div>
+        </div>
+        <div class="qrcard rv">
+          <img src="qr-mobile.svg" alt="QR code — scan to open the mobile concepts on your phone" width="248" height="248" />
+          <div class="ph"><svg viewBox="0 0 24 24"><rect x="7" y="3" width="10" height="18" rx="2.5"/><path d="M11 18h2" stroke-linecap="round"/></svg> Scan with your camera</div>
+        </div>
+      </div>
+    </div>
   </section>
 
   <!-- COMPARISON MATRIX -->
