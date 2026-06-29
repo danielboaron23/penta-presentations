@@ -130,9 +130,15 @@
     .phone.lg{width:300px;}
     .phone.lg .phone-shell{border-radius:42px;padding:8px;}
     .phone.lg .phone-screen{width:284px;height:584px;border-radius:36px;}
-    .phone.lg .phone-screen iframe{width:390px;height:802px;transform:scale(.7282);}
+    .phone.lg .phone-screen iframe{width:390px;height:802px;transform:scale(.7282);pointer-events:auto;}
     .phone.lg .phone-notch{width:116px;height:21px;}
-    .phone.lg .phone-ovl{border-radius:36px;}
+    /* deep-dive phones are interactive/scrollable — drop the click overlay & cursor, add a scroll cue */
+    .phone.lg .phone-ovl{display:none;}
+    .phone.lg .phone-shell{cursor:default;}
+    .phone.lg .phone-shell::after{content:"\2195  scroll to explore";position:absolute;left:50%;bottom:16px;transform:translateX(-50%);z-index:6;
+      font-family:var(--mono);font-size:10px;letter-spacing:.03em;color:#fff;background:rgba(18,18,26,.62);backdrop-filter:blur(4px);
+      padding:6px 12px;border-radius:999px;pointer-events:none;white-space:nowrap;transition:opacity .35s var(--e2);}
+    .phone.lg .phone-shell.scrolled::after{opacity:0;}
 
     /* take */
     .take{background:var(--ink);color:#fff;border-radius:22px;padding:clamp(30px,5vw,60px);}
@@ -367,6 +373,10 @@
         setTimeout(function(){ rvs.forEach(function(el){el.classList.add('in');}); }, 2200);
       } else { rvs.forEach(function(el){el.classList.add('in');}); }
       document.querySelectorAll('[data-open]').forEach(function(el){ el.addEventListener('click',function(){ window.open(el.dataset.open,'_blank','noopener'); }); });
+      // deep-dive phones are scrollable — they scroll their inner #scroll container; fade the cue once used
+      function bindPhone(f){ try{ var d=f.contentDocument; if(!d) return; var sc=d.getElementById('scroll');
+        if(sc) sc.addEventListener('scroll',function(){ var sh=f.closest('.phone-shell'); if(sh) sh.classList.add('scrolled'); },{passive:true}); }catch(e){} }
+      document.querySelectorAll('.phone.lg .phone-screen iframe').forEach(function(f){ f.addEventListener('load',function(){bindPhone(f);}); bindPhone(f); });
     })();
   </script>
 </body>

@@ -123,11 +123,15 @@
     .dive .dlinks a{display:inline-flex;align-items:center;gap:8px;font-size:14px;font-weight:600;color:var(--ink);}
     .dive .dlinks a svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;}
     .dive-media{position:relative;}
-    .dive-frame{border-radius:16px;overflow:hidden;border:1px solid var(--line);box-shadow:0 24px 60px rgba(20,20,40,.12);background:#fff;height:clamp(300px,38vw,460px);position:relative;cursor:pointer;}
+    .dive-frame{border-radius:16px;overflow:hidden;border:1px solid var(--line);box-shadow:0 24px 60px rgba(20,20,40,.12);background:#fff;height:clamp(360px,52vw,560px);position:relative;}
+    /* scroll hint badge — fades out once you start scrolling the preview */
+    .dive-frame .scrollcue{position:absolute;right:12px;bottom:12px;z-index:4;font-family:var(--mono);font-size:10px;letter-spacing:.04em;color:#fff;background:rgba(20,20,28,.62);backdrop-filter:blur(4px);padding:6px 11px;border-radius:999px;pointer-events:none;display:flex;align-items:center;gap:6px;transition:opacity .35s var(--e2);}
+    .dive-frame.scrolled .scrollcue{opacity:0;}
+    .dive-frame .scrollcue svg{width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2;}
     .dive-frame .browser{position:absolute;top:0;left:0;right:0;height:28px;background:#f1f1f3;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:6px;padding:0 12px;z-index:2;}
     .dive-frame .browser i{width:8px;height:8px;border-radius:50%;background:#d6d6db;}
     .dive-frame .browser span{margin-left:8px;font-family:var(--mono);font-size:10px;color:#9a9aa2;}
-    .dive-frame iframe{position:absolute;top:28px;left:0;width:1440px;height:1100px;border:0;transform:scale(.42);transform-origin:top left;pointer-events:none;}
+    .dive-frame iframe{position:absolute;top:28px;left:0;width:1440px;height:1280px;border:0;transform:scale(.42);transform-origin:top left;pointer-events:auto;}
 
     /* take */
     .take{background:var(--ink);color:#fff;border-radius:22px;padding:clamp(34px,5vw,64px);}
@@ -288,7 +292,7 @@
           </div>
           <div class="dlinks"><a href="profile.html" target="_blank" rel="noopener">Open live <svg viewBox="0 0 24 24"><path d="M7 17 17 7M9 7h8v8" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
         </div>
-        <div class="dive-media"><div class="dive-frame" data-open="profile.html"><div class="browser"><i></i><i></i><i></i><span>profile.html</span></div><iframe src="profile.html" title="Classic" loading="lazy" scrolling="no"></iframe></div></div>
+        <div class="dive-media"><div class="dive-frame"><div class="browser"><i></i><i></i><i></i><span>profile.html</span></div><iframe src="profile.html" title="Classic" loading="lazy"></iframe><span class="scrollcue"><svg viewBox="0 0 24 24"><path d="M12 5v14M6 13l6 6 6-6" stroke-linecap="round" stroke-linejoin="round"/></svg>scroll to explore</span></div></div>
       </div>
 
       <div class="dive">
@@ -304,7 +308,7 @@
           </div>
           <div class="dlinks"><a href="profile-immersive.html" target="_blank" rel="noopener">Open live <svg viewBox="0 0 24 24"><path d="M7 17 17 7M9 7h8v8" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
         </div>
-        <div class="dive-media"><div class="dive-frame" data-open="profile-immersive.html"><div class="browser"><i></i><i></i><i></i><span>profile-immersive.html</span></div><iframe src="profile-immersive.html" title="Immersive" loading="lazy" scrolling="no"></iframe></div></div>
+        <div class="dive-media"><div class="dive-frame"><div class="browser"><i></i><i></i><i></i><span>profile-immersive.html</span></div><iframe src="profile-immersive.html" title="Immersive" loading="lazy"></iframe><span class="scrollcue"><svg viewBox="0 0 24 24"><path d="M12 5v14M6 13l6 6 6-6" stroke-linecap="round" stroke-linejoin="round"/></svg>scroll to explore</span></div></div>
       </div>
 
       <div class="dive">
@@ -320,7 +324,7 @@
           </div>
           <div class="dlinks"><a href="profile-noir.html" target="_blank" rel="noopener">Open live <svg viewBox="0 0 24 24"><path d="M7 17 17 7M9 7h8v8" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
         </div>
-        <div class="dive-media"><div class="dive-frame" data-open="profile-noir.html"><div class="browser"><i></i><i></i><i></i><span>profile-noir.html</span></div><iframe src="profile-noir.html" title="Editorial Noir" loading="lazy" scrolling="no"></iframe></div></div>
+        <div class="dive-media"><div class="dive-frame"><div class="browser"><i></i><i></i><i></i><span>profile-noir.html</span></div><iframe src="profile-noir.html" title="Editorial Noir" loading="lazy"></iframe><span class="scrollcue"><svg viewBox="0 0 24 24"><path d="M12 5v14M6 13l6 6 6-6" stroke-linecap="round" stroke-linejoin="round"/></svg>scroll to explore</span></div></div>
       </div>
     </div>
   </section>
@@ -353,8 +357,23 @@
         // safety: heavy iframes can delay the observer — never leave content hidden
         setTimeout(function(){ rvs.forEach(function(el){el.classList.add('in');}); }, 2000);
       } else { rvs.forEach(function(el){el.classList.add('in');}); }
-      // click a preview frame → open full page in a new tab
+      // click a 3-up preview frame → open full page in a new tab
       document.querySelectorAll('[data-open]').forEach(function(el){ el.addEventListener('click',function(){ window.open(el.dataset.open,'_blank','noopener'); }); });
+      // deep-dive previews are scrollable. The Penta design-system sets body{display:flex},
+      // which makes the embedded page's scroll root inert — inject a block override (same-origin)
+      // so the iframe scrolls normally, then fade the hint once the user scrolls it.
+      function fixFrame(f){
+        try{
+          var d=f.contentDocument; if(!d||!d.body) return;
+          if(!d.getElementById('__cmpfix')){
+            var s=d.createElement('style'); s.id='__cmpfix';
+            s.textContent='body{display:block!important;} html{scroll-behavior:auto!important;}';
+            (d.head||d.documentElement).appendChild(s);
+          }
+          f.contentWindow.addEventListener('scroll',function(){ var df=f.closest('.dive-frame'); if(df) df.classList.add('scrolled'); },{passive:true});
+        }catch(e){}
+      }
+      document.querySelectorAll('.dive-frame iframe').forEach(function(f){ f.addEventListener('load',function(){fixFrame(f);}); fixFrame(f); });
     })();
   </script>
 </body>
