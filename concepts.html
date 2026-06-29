@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Seller Page — Three Concepts · Penta</title>
+  <meta name="description" content="One seller, three directions — Classic, Immersive, and Editorial Noir. A side-by-side comparison of the seller-page concepts." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg:#f6f6f7; --paper:#fff; --ink:#16161a; --body:#3f3f46; --muted:#71717a; --faint:#a1a1aa;
+      --line:#e6e6ea; --line2:#d8d8de; --wash:#fafafa;
+      --accent:#5b53e0; --accent2:#7c75ff; --good:#16a34a;
+      --sans:'Inter','Helvetica Neue',Arial,sans-serif;
+      --serif:'Instrument Serif',Georgia,serif;
+      --mono:'Space Mono',ui-monospace,monospace;
+      --e2:cubic-bezier(.16,1,.3,1); --ep:cubic-bezier(.24,.48,0,.98);
+      --maxw:1240px;
+      /* per-concept accents */
+      --c1:#2b2b30; --c2:#2563eb; --c3:#caa86a;
+    }
+    *{box-sizing:border-box;}
+    html{scroll-behavior:smooth;}
+    body{margin:0;background:var(--bg);color:var(--body);font-family:var(--sans);-webkit-font-smoothing:antialiased;overflow-x:hidden;}
+    a{color:inherit;text-decoration:none;}
+    img{display:block;max-width:100%;}
+    .wrap{max-width:var(--maxw);margin:0 auto;padding:0 clamp(20px,4vw,40px);}
+    h1,h2,h3{color:var(--ink);margin:0;letter-spacing:-.01em;}
+    .mono{font-family:var(--mono);}
+    .eyebrow{font-family:var(--mono);font-size:11.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);}
+
+    /* nav */
+    .nav{position:sticky;top:0;z-index:50;background:rgba(246,246,247,.82);backdrop-filter:saturate(1.3) blur(12px);border-bottom:1px solid var(--line);}
+    .nav-in{display:flex;align-items:center;height:62px;gap:18px;}
+    .brand{font-weight:700;color:var(--ink);font-size:17px;letter-spacing:-.01em;display:flex;align-items:center;gap:9px;}
+    .brand .dot{width:8px;height:8px;border-radius:50%;background:var(--ink);}
+    .nav .tag{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);padding-left:14px;border-left:1px solid var(--line2);}
+    .nav-right{margin-left:auto;display:flex;gap:10px;}
+    .nav-right a{font-size:13.5px;font-weight:600;color:var(--body);padding:9px 14px;border-radius:9px;transition:background .25s;}
+    .nav-right a:hover{background:#ececef;color:var(--ink);}
+    .nav-right a.cta{background:var(--ink);color:#fff;} .nav-right a.cta:hover{background:#000;}
+
+    /* hero */
+    .hero{padding:clamp(54px,8vw,104px) 0 clamp(34px,5vw,60px);}
+    .hero h1{font-family:var(--serif);font-weight:400;font-size:clamp(46px,8vw,104px);line-height:.96;letter-spacing:-.02em;}
+    .hero h1 em{font-style:italic;color:var(--accent);}
+    .hero .sub{font-size:clamp(17px,1.7vw,21px);line-height:1.55;color:var(--body);max-width:62ch;margin:26px 0 0;}
+    .hero .sub b{color:var(--ink);font-weight:600;}
+    .hero .meta{display:flex;gap:10px;flex-wrap:wrap;margin-top:30px;}
+    .pill{font-family:var(--mono);font-size:12px;letter-spacing:.04em;color:var(--body);background:var(--paper);border:1px solid var(--line);border-radius:999px;padding:8px 14px;display:inline-flex;align-items:center;gap:8px;}
+    .pill .sw{width:9px;height:9px;border-radius:50%;}
+
+    /* ===== 3-up live previews ===== */
+    .previews{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(16px,2vw,24px);padding-bottom:20px;}
+    @media(max-width:920px){.previews{grid-template-columns:1fr;max-width:520px;margin:0 auto;}}
+    .concept{background:var(--paper);border:1px solid var(--line);border-radius:18px;overflow:hidden;display:flex;flex-direction:column;
+      transition:box-shadow .4s var(--e2),transform .4s var(--e2),border-color .4s;}
+    .concept:hover{box-shadow:0 24px 60px rgba(20,20,40,.12);transform:translateY(-4px);border-color:var(--line2);}
+    .concept .top{display:flex;align-items:center;gap:10px;padding:16px 18px;border-bottom:1px solid var(--line);}
+    .concept .no{font-family:var(--mono);font-size:12px;color:#fff;width:30px;height:30px;border-radius:8px;display:grid;place-items:center;font-weight:700;}
+    .concept .nm{font-weight:700;color:var(--ink);font-size:16px;}
+    .concept .badge{margin-left:auto;font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;padding:4px 9px;border-radius:999px;border:1px solid var(--line);color:var(--muted);}
+    /* live preview frame */
+    .frame{position:relative;height:300px;overflow:hidden;background:#fff;cursor:pointer;border-bottom:1px solid var(--line);}
+    .frame iframe{position:absolute;top:24px;left:0;width:1280px;height:1066px;border:0;transform:scale(.31);transform-origin:top left;pointer-events:none;}
+    .frame .browser{position:absolute;top:0;left:0;right:0;height:24px;background:#f1f1f3;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:5px;padding:0 10px;z-index:2;}
+    .frame .browser i{width:7px;height:7px;border-radius:50%;background:#d6d6db;}
+    .frame .browser span{margin-left:8px;font-family:var(--mono);font-size:9px;color:#9a9aa2;}
+    .frame .ovl{position:absolute;inset:24px 0 0 0;z-index:3;display:flex;align-items:flex-end;justify-content:center;padding-bottom:18px;
+      background:linear-gradient(transparent 55%,rgba(0,0,0,.5));opacity:0;transition:opacity .3s var(--e2);}
+    .frame:hover .ovl{opacity:1;}
+    .frame .ovl .open{background:#fff;color:var(--ink);font-weight:700;font-size:13px;border-radius:999px;padding:10px 18px;display:inline-flex;align-items:center;gap:8px;box-shadow:0 6px 20px rgba(0,0,0,.25);}
+    .frame .ovl .open svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2;}
+    .concept .body{padding:18px;display:flex;flex-direction:column;gap:14px;flex:1;}
+    .concept .tl{font-size:15px;color:var(--body);line-height:1.5;} .concept .tl b{color:var(--ink);}
+    .concept .feat{display:flex;flex-direction:column;gap:8px;}
+    .concept .feat .f{display:flex;gap:9px;font-size:13px;color:var(--muted);align-items:flex-start;}
+    .concept .feat .f svg{width:15px;height:15px;flex-shrink:0;margin-top:1px;stroke:currentColor;fill:none;stroke-width:1.7;}
+    .concept .feat .f b{color:var(--ink);font-weight:600;}
+    .concept .links{display:flex;gap:8px;margin-top:auto;padding-top:6px;}
+    .concept .links a{flex:1;text-align:center;font-size:13.5px;font-weight:600;padding:11px;border-radius:10px;transition:all .25s;}
+    .concept .links a.p{background:var(--ink);color:#fff;} .concept .links a.p:hover{background:#000;}
+    .concept .links a.s{border:1px solid var(--line);color:var(--body);} .concept .links a.s:hover{background:var(--wash);border-color:var(--line2);}
+
+    /* ===== comparison matrix ===== */
+    .section{padding:clamp(56px,8vw,96px) 0;}
+    .seclabel{display:flex;align-items:center;gap:14px;margin-bottom:32px;}
+    .seclabel .ttl{font-family:var(--mono);font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);}
+    .seclabel .ln{flex:1;height:1px;background:var(--line);}
+    .section h2{font-family:var(--serif);font-weight:400;font-size:clamp(30px,4.4vw,52px);line-height:1.02;margin-bottom:36px;}
+    .section h2 em{font-style:italic;color:var(--accent);}
+
+    .matrix-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:16px;background:var(--paper);}
+    table.matrix{width:100%;border-collapse:collapse;min-width:760px;}
+    table.matrix th,table.matrix td{padding:18px 20px;text-align:left;border-top:1px solid var(--line);vertical-align:top;}
+    table.matrix thead th{border-top:none;background:var(--paper);}
+    table.matrix thead .cn{display:flex;align-items:center;gap:9px;font-size:15px;color:var(--ink);font-weight:700;}
+    table.matrix thead .cn i{width:10px;height:10px;border-radius:3px;}
+    table.matrix thead .cd{font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-top:5px;font-weight:400;}
+    table.matrix td:first-child,table.matrix th:first-child{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);width:170px;background:var(--wash);}
+    table.matrix td{font-size:14.5px;color:var(--body);line-height:1.45;}
+    table.matrix td b{color:var(--ink);font-weight:600;}
+    table.matrix tbody tr:hover td{background:#fcfcfd;} table.matrix tbody tr:hover td:first-child{background:#f4f4f6;}
+
+    /* ===== one-by-one deep dives ===== */
+    .dive{display:grid;grid-template-columns:1.05fr .95fr;gap:clamp(28px,4vw,64px);align-items:center;padding:clamp(40px,6vw,80px) 0;border-top:1px solid var(--line);}
+    .dive:nth-child(even){grid-template-columns:.95fr 1.05fr;}
+    .dive:nth-child(even) .dive-media{order:-1;}
+    .dive>div,.dive-media{min-width:0;}
+    @media(max-width:860px){.dive,.dive:nth-child(even){grid-template-columns:1fr;}.dive:nth-child(even) .dive-media{order:0;}}
+    .dive-no{font-family:var(--mono);font-size:13px;color:#fff;width:38px;height:38px;border-radius:10px;display:grid;place-items:center;font-weight:700;margin-bottom:20px;}
+    .dive h3{font-family:var(--serif);font-weight:400;font-size:clamp(28px,3.6vw,44px);line-height:1.04;margin-bottom:8px;}
+    .dive .ds{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:20px;}
+    .dive p{font-size:16px;line-height:1.65;color:var(--body);margin:0 0 16px;max-width:48ch;} .dive p b{color:var(--ink);}
+    .dive .pts{display:flex;flex-direction:column;gap:11px;margin:20px 0 26px;}
+    .dive .pts .pt{display:flex;gap:11px;font-size:14.5px;color:var(--body);align-items:flex-start;}
+    .dive .pts .pt b{color:var(--ink);}
+    .dive .pts .pt .dt{width:7px;height:7px;border-radius:50%;flex-shrink:0;margin-top:7px;}
+    .dive .dlinks a{display:inline-flex;align-items:center;gap:8px;font-size:14px;font-weight:600;color:var(--ink);}
+    .dive .dlinks a svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;}
+    .dive-media{position:relative;}
+    .dive-frame{border-radius:16px;overflow:hidden;border:1px solid var(--line);box-shadow:0 24px 60px rgba(20,20,40,.12);background:#fff;height:clamp(300px,38vw,460px);position:relative;cursor:pointer;}
+    .dive-frame .browser{position:absolute;top:0;left:0;right:0;height:28px;background:#f1f1f3;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:6px;padding:0 12px;z-index:2;}
+    .dive-frame .browser i{width:8px;height:8px;border-radius:50%;background:#d6d6db;}
+    .dive-frame .browser span{margin-left:8px;font-family:var(--mono);font-size:10px;color:#9a9aa2;}
+    .dive-frame iframe{position:absolute;top:28px;left:0;width:1440px;height:1100px;border:0;transform:scale(.42);transform-origin:top left;pointer-events:none;}
+
+    /* take */
+    .take{background:var(--ink);color:#fff;border-radius:22px;padding:clamp(34px,5vw,64px);}
+    .take h2{color:#fff;} .take h2 em{color:var(--accent2);}
+    .take-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:30px;}
+    @media(max-width:760px){.take-grid{grid-template-columns:1fr;}}
+    .take-grid .t{border:1px solid rgba(255,255,255,.14);border-radius:14px;padding:22px;}
+    .take-grid .t .h{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent2);margin-bottom:12px;}
+    .take-grid .t b{color:#fff;font-size:17px;font-weight:700;display:block;margin-bottom:8px;}
+    .take-grid .t p{color:#c9c9d2;font-size:14px;line-height:1.55;margin:0;}
+
+    /* footer */
+    .ftr{border-top:1px solid var(--line);padding:34px 0;}
+    .ftr-in{display:flex;justify-content:space-between;flex-wrap:wrap;gap:14px;align-items:center;font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);}
+
+    .rv{opacity:0;transform:translateY(22px);transition:opacity .7s var(--e2),transform .7s var(--e2);}
+    .rv.in{opacity:1;transform:none;}
+    @media (prefers-reduced-motion: reduce){.rv{opacity:1;transform:none;}html{scroll-behavior:auto;}}
+  </style>
+</head>
+<body>
+  <!-- NAV -->
+  <nav class="nav">
+    <div class="wrap nav-in">
+      <a href="hub.html" class="brand"><span class="dot"></span>Penta</a>
+      <span class="tag">Seller page · concepts</span>
+      <div class="nav-right">
+        <a href="#matrix">Compare</a>
+        <a href="seller-profile-deck.html" class="cta">The deck ↗</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <header class="hero">
+    <div class="wrap">
+      <p class="eyebrow rv">Penta · Seller page exploration · 2026</p>
+      <h1 class="rv" style="margin-top:18px">One seller,<br/><em>three</em> directions.</h1>
+      <p class="sub rv">We explored three concepts for Tommy Frank's seller page — the same content and components, three very different points of view. <b>Classic</b> keeps the conversion-first marketplace. <b>Immersive</b> turns the portfolio into a scroll experience. <b>Editorial Noir</b> reimagines it as a cinematic studio with its own design language.</p>
+      <div class="meta rv">
+        <span class="pill"><span class="sw" style="background:var(--c1)"></span>01 · Classic</span>
+        <span class="pill"><span class="sw" style="background:var(--c2)"></span>02 · Immersive</span>
+        <span class="pill"><span class="sw" style="background:var(--c3)"></span>03 · Editorial Noir</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- 3-UP PREVIEWS -->
+  <section class="wrap" style="padding-bottom:clamp(40px,6vw,72px)">
+    <div class="previews">
+
+      <!-- 01 CLASSIC -->
+      <article class="concept rv">
+        <div class="top"><span class="no" style="background:var(--c1)">01</span><span class="nm">Classic</span><span class="badge">Penta DS</span></div>
+        <div class="frame" data-open="profile.html">
+          <div class="browser"><i></i><i></i><i></i><span>profile.html</span></div>
+          <iframe src="profile.html" title="Classic preview" loading="lazy" scrolling="no"></iframe>
+          <div class="ovl"><span class="open">Open live <svg viewBox="0 0 24 24"><path d="M7 17 17 7M9 7h8v8" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div>
+        </div>
+        <div class="body">
+          <div class="tl">The <b>conversion-first</b> marketplace profile — clean, trustworthy, familiar.</div>
+          <div class="feat">
+            <div class="f"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h10" stroke-linecap="round"/></svg><span><b>Bento gallery</b> — drag to reorder, click to open (modal + dock)</span></div>
+            <div class="f"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2" stroke-linecap="round"/></svg><span><b>Restrained</b> motion — fast &amp; legible</span></div>
+            <div class="f"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Monochrome Penta · ink on white</span></div>
+          </div>
+          <div class="links"><a class="p" href="profile.html" target="_blank" rel="noopener">Open live</a><a class="s" href="profile-mobile.html" target="_blank" rel="noopener">Mobile</a></div>
+        </div>
+      </article>
+
+      <!-- 02 IMMERSIVE -->
+      <article class="concept rv">
+        <div class="top"><span class="no" style="background:var(--c2)">02</span><span class="nm">Immersive</span><span class="badge">Penta DS</span></div>
+        <div class="frame" data-open="profile-immersive.html">
+          <div class="browser"><i></i><i></i><i></i><span>profile-immersive.html</span></div>
+          <iframe src="profile-immersive.html" title="Immersive preview" loading="lazy" scrolling="no"></iframe>
+          <div class="ovl"><span class="open">Open live <svg viewBox="0 0 24 24"><path d="M7 17 17 7M9 7h8v8" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div>
+        </div>
+        <div class="body">
+          <div class="tl">Same system, <b>full-bleed</b> — the work pulls you in as you scroll.</div>
+          <div class="feat">
+            <div class="f"><svg viewBox="0 0 24 24"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7" stroke-linecap="round" stroke-linejoin="round"/></svg><span><b>Zoom-parallax</b> gallery — scroll to dive in</span></div>
+            <div class="f"><svg viewBox="0 0 24 24"><path d="M12 3v18M5 10l7-7 7 7" stroke-linecap="round" stroke-linejoin="round"/></svg><span><b>Scroll-driven</b> — dramatic &amp; cinematic</span></div>
+            <div class="f"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Wow moment · landing-style showcase</span></div>
+          </div>
+          <div class="links"><a class="p" href="profile-immersive.html" target="_blank" rel="noopener">Open live</a></div>
+        </div>
+      </article>
+
+      <!-- 03 EDITORIAL NOIR -->
+      <article class="concept rv">
+        <div class="top"><span class="no" style="background:var(--c3)">03</span><span class="nm">Editorial Noir</span><span class="badge" style="border-color:#e8d9b3;color:#9c7e44">New system</span></div>
+        <div class="frame" data-open="profile-noir.html">
+          <div class="browser"><i></i><i></i><i></i><span>profile-noir.html</span></div>
+          <iframe src="profile-noir.html" title="Editorial Noir preview" loading="lazy" scrolling="no"></iframe>
+          <div class="ovl"><span class="open">Open live <svg viewBox="0 0 24 24"><path d="M7 17 17 7M9 7h8v8" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div>
+        </div>
+        <div class="body">
+          <div class="tl">A <b>cinematic, gallery-grade studio</b> — its own dark, editorial design language.</div>
+          <div class="feat">
+            <div class="f"><svg viewBox="0 0 24 24"><path d="M3 12h18M8 7l-5 5 5 5M16 7l5 5-5 5" stroke-linecap="round" stroke-linejoin="round"/></svg><span><b>Horizontal pinned reel</b> + lightbox</span></div>
+            <div class="f"><svg viewBox="0 0 24 24"><path d="M12 2l2.4 5.6L20 8.3l-4 4 1 5.7L12 15l-5 3 1-5.7-4-4 5.6-.7z" stroke-linecap="round" stroke-linejoin="round"/></svg><span><b>Custom system</b> — serif + gold + grain</span></div>
+            <div class="f"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Premium creative brand · portfolio-forward</span></div>
+          </div>
+          <div class="links"><a class="p" href="profile-noir.html" target="_blank" rel="noopener">Open live</a></div>
+        </div>
+      </article>
+
+    </div>
+    <p class="eyebrow" style="text-align:center;margin-top:6px">Previews are live — hover a card and click to open the full page</p>
+  </section>
+
+  <!-- COMPARISON MATRIX -->
+  <section class="section" id="matrix" style="background:var(--paper);border-top:1px solid var(--line);border-bottom:1px solid var(--line);">
+    <div class="wrap">
+      <div class="seclabel rv"><span class="ttl">The differences</span><span class="ln"></span></div>
+      <h2 class="rv">Same seller. <em>Three</em> points of view.</h2>
+      <div class="matrix-wrap rv">
+        <table class="matrix">
+          <thead><tr>
+            <th></th>
+            <th><div class="cn"><i style="background:var(--c1)"></i>01 · Classic</div><div class="cd">profile.html</div></th>
+            <th><div class="cn"><i style="background:var(--c2)"></i>02 · Immersive</div><div class="cd">profile-immersive.html</div></th>
+            <th><div class="cn"><i style="background:var(--c3)"></i>03 · Editorial Noir</div><div class="cd">profile-noir.html</div></th>
+          </tr></thead>
+          <tbody>
+            <tr><td>Design system</td><td><b>Penta</b> (Fiverr DS)</td><td><b>Penta</b>, full-bleed</td><td><b>Custom</b> — standalone</td></tr>
+            <tr><td>Aesthetic</td><td>Clean monochrome — ink on white</td><td>Same, but cinematic &amp; full-screen</td><td>OLED black · warm gold · film-grain</td></tr>
+            <tr><td>Typography</td><td>Macan (sans)</td><td>Macan (sans)</td><td><b>Fraunces</b> serif · Space Mono</td></tr>
+            <tr><td>Signature moment</td><td>Interactive <b>bento gallery</b></td><td><b>Scroll zoom-parallax</b></td><td><b>Horizontal pinned reel</b></td></tr>
+            <tr><td>Gallery</td><td>Bento grid + modal &amp; dock</td><td>Layered images, scroll-to-zoom</td><td>Cinematic film-strip + lightbox</td></tr>
+            <tr><td>Motion</td><td>Restrained · functional</td><td>Scroll-driven · dramatic</td><td>Cinematic — reveals, parallax, count-ups</td></tr>
+            <tr><td>Color</td><td>Ink #222 on white</td><td>Ink on white</td><td>Black + gold #caa86a</td></tr>
+            <tr><td>Personality</td><td>Trustworthy · neutral</td><td>Bold · attention-grabbing</td><td>Luxurious · gallery / agency</td></tr>
+            <tr><td>Best for</td><td><b>Default marketplace</b> — convert &amp; reassure</td><td>A <b>wow</b> / hero moment</td><td><b>Premium</b> creative sellers &amp; brands</td></tr>
+            <tr><td>Risk / lift</td><td>Low — reuses the DS</td><td>Medium — new scroll behavior</td><td>Higher — a separate system to maintain</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ONE BY ONE -->
+  <section class="section">
+    <div class="wrap">
+      <div class="seclabel rv"><span class="ttl">One by one</span><span class="ln"></span></div>
+
+      <div class="dive">
+        <div>
+          <div class="dive-no" style="background:var(--c1)">01</div>
+          <h3>Classic</h3>
+          <div class="ds">Penta design system · profile.html</div>
+          <p>The dependable marketplace seller page — instantly familiar, fast, and built to <b>convert</b>. Reuses ~70% of the existing Penta components, so it ships with the lowest risk.</p>
+          <div class="pts">
+            <div class="pt"><span class="dt" style="background:var(--c1)"></span><span><b>Interactive bento gallery</b> — drag to reorder, click → modal with a draggable thumbnail dock.</span></div>
+            <div class="pt"><span class="dt" style="background:var(--c1)"></span><span><b>Quantified trust</b> bar, AI fit-summary, reviews with breakdown + AI digest.</span></div>
+            <div class="pt"><span class="dt" style="background:var(--c1)"></span><span>Sticky contact rail · full mobile parity.</span></div>
+          </div>
+          <div class="dlinks"><a href="profile.html" target="_blank" rel="noopener">Open live <svg viewBox="0 0 24 24"><path d="M7 17 17 7M9 7h8v8" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
+        </div>
+        <div class="dive-media"><div class="dive-frame" data-open="profile.html"><div class="browser"><i></i><i></i><i></i><span>profile.html</span></div><iframe src="profile.html" title="Classic" loading="lazy" scrolling="no"></iframe></div></div>
+      </div>
+
+      <div class="dive">
+        <div>
+          <div class="dive-no" style="background:var(--c2)">02</div>
+          <h3>Immersive</h3>
+          <div class="ds">Penta design system, full-bleed · profile-immersive.html</div>
+          <p>The same product, turned into an <b>experience</b>. As you scroll, the portfolio images zoom and dive toward you, then resolve into the full profile — a landing-page-grade moment that still does the marketplace job.</p>
+          <div class="pts">
+            <div class="pt"><span class="dt" style="background:var(--c2)"></span><span><b>Scroll-driven zoom-parallax</b> hero gallery (a vanilla port of the Framer-Motion pattern).</span></div>
+            <div class="pt"><span class="dt" style="background:var(--c2)"></span><span>Full-width, edge-to-edge — fixed to fill large screens.</span></div>
+            <div class="pt"><span class="dt" style="background:var(--c2)"></span><span>Graceful fallback to a static grid on mobile / reduced-motion.</span></div>
+          </div>
+          <div class="dlinks"><a href="profile-immersive.html" target="_blank" rel="noopener">Open live <svg viewBox="0 0 24 24"><path d="M7 17 17 7M9 7h8v8" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
+        </div>
+        <div class="dive-media"><div class="dive-frame" data-open="profile-immersive.html"><div class="browser"><i></i><i></i><i></i><span>profile-immersive.html</span></div><iframe src="profile-immersive.html" title="Immersive" loading="lazy" scrolling="no"></iframe></div></div>
+      </div>
+
+      <div class="dive">
+        <div>
+          <div class="dive-no" style="background:var(--c3)">03</div>
+          <h3>Editorial Noir</h3>
+          <div class="ds">Custom design system · profile-noir.html</div>
+          <p>A complete reimagining — a <b>cinematic, gallery-grade studio</b> with its own dark, editorial design language. Doesn't load the Fiverr DS at all: serif display, a single warm-gold accent, film grain, and a horizontal pinned reel.</p>
+          <div class="pts">
+            <div class="pt"><span class="dt" style="background:var(--c3)"></span><span><b>Horizontal pinned reel</b> — scroll drives a film-strip of works with editorial captions.</span></div>
+            <div class="pt"><span class="dt" style="background:var(--c3)"></span><span><b>Fraunces serif</b> + Space Mono labels + gold accents + grain.</span></div>
+            <div class="pt"><span class="dt" style="background:var(--c3)"></span><span>Still a real marketplace page — nav, trust, AI fit, hire flow all present.</span></div>
+          </div>
+          <div class="dlinks"><a href="profile-noir.html" target="_blank" rel="noopener">Open live <svg viewBox="0 0 24 24"><path d="M7 17 17 7M9 7h8v8" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
+        </div>
+        <div class="dive-media"><div class="dive-frame" data-open="profile-noir.html"><div class="browser"><i></i><i></i><i></i><span>profile-noir.html</span></div><iframe src="profile-noir.html" title="Editorial Noir" loading="lazy" scrolling="no"></iframe></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TAKE -->
+  <section class="section" style="padding-top:0">
+    <div class="wrap">
+      <div class="take rv">
+        <div class="seclabel" style="margin-bottom:24px"><span class="ttl" style="color:#9a93c9">Which one, when</span><span class="ln" style="background:rgba(255,255,255,.16)"></span></div>
+        <h2>Pick by the <em>job</em>, not the looks.</h2>
+        <div class="take-grid">
+          <div class="t"><div class="h">Ship the marketplace</div><b>→ Classic</b><p>Lowest risk, fully on-system, mobile-ready. The safe default that converts and reassures.</p></div>
+          <div class="t"><div class="h">Make people stop</div><b>→ Immersive</b><p>For a hero seller, a campaign, or a "featured creator" spotlight where the wow earns the scroll.</p></div>
+          <div class="t"><div class="h">Sell a premium brand</div><b>→ Editorial Noir</b><p>For top-tier creative sellers where the page itself is part of the portfolio. A distinct, ownable identity.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="ftr"><div class="wrap ftr-in"><span>Fiverr Penta · Seller page concepts</span><span>Classic · Immersive · Editorial Noir — 2026</span></div></footer>
+
+  <script>
+    (function(){
+      var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+      var rvs=[].slice.call(document.querySelectorAll('.rv'));
+      function inView(el){ var r=el.getBoundingClientRect(); return r.top < innerHeight*0.94 && r.bottom > 0; }
+      if('IntersectionObserver' in window && !reduce){
+        var io=new IntersectionObserver(function(es){es.forEach(function(e){ if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);} });},{threshold:.12});
+        rvs.forEach(function(el){ if(inView(el)) el.classList.add('in'); else io.observe(el); });
+        // safety: heavy iframes can delay the observer — never leave content hidden
+        setTimeout(function(){ rvs.forEach(function(el){el.classList.add('in');}); }, 2000);
+      } else { rvs.forEach(function(el){el.classList.add('in');}); }
+      // click a preview frame → open full page in a new tab
+      document.querySelectorAll('[data-open]').forEach(function(el){ el.addEventListener('click',function(){ window.open(el.dataset.open,'_blank','noopener'); }); });
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Seller Page — Three Concepts (Mobile) · Penta</title>
+  <meta name="description" content="One seller, three directions — on mobile. Classic, Immersive, and Editorial Noir phone experiences side by side." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg:#f6f6f7; --paper:#fff; --ink:#16161a; --body:#3f3f46; --muted:#71717a; --faint:#a1a1aa;
+      --line:#e6e6ea; --line2:#d8d8de; --wash:#fafafa;
+      --accent:#5b53e0; --accent2:#7c75ff;
+      --sans:'Inter','Helvetica Neue',Arial,sans-serif;
+      --serif:'Instrument Serif',Georgia,serif;
+      --mono:'Space Mono',ui-monospace,monospace;
+      --e2:cubic-bezier(.16,1,.3,1);
+      --maxw:1180px;
+      --c1:#2b2b30; --c2:#2563eb; --c3:#caa86a;
+    }
+    *{box-sizing:border-box;}
+    html{scroll-behavior:smooth;}
+    body{margin:0;background:var(--bg);color:var(--body);font-family:var(--sans);-webkit-font-smoothing:antialiased;overflow-x:hidden;}
+    a{color:inherit;text-decoration:none;}
+    img{display:block;max-width:100%;}
+    .wrap{max-width:var(--maxw);margin:0 auto;padding:0 clamp(18px,4vw,40px);}
+    h1,h2,h3{color:var(--ink);margin:0;letter-spacing:-.01em;}
+    .mono{font-family:var(--mono);}
+    .eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);}
+
+    /* nav */
+    .nav{position:sticky;top:0;z-index:50;background:rgba(246,246,247,.84);backdrop-filter:saturate(1.3) blur(12px);border-bottom:1px solid var(--line);}
+    .nav-in{display:flex;align-items:center;height:60px;gap:14px;}
+    .brand{font-weight:700;color:var(--ink);font-size:16px;letter-spacing:-.01em;display:flex;align-items:center;gap:9px;}
+    .brand .dot{width:8px;height:8px;border-radius:50%;background:var(--ink);}
+    .nav .tag{font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding-left:12px;border-left:1px solid var(--line2);}
+    @media(max-width:560px){.nav .tag{display:none;}}
+    .nav-right{margin-left:auto;display:flex;gap:8px;}
+    .nav-right a{font-size:13px;font-weight:600;color:var(--body);padding:8px 13px;border-radius:9px;transition:background .25s;}
+    .nav-right a:hover{background:#ececef;color:var(--ink);}
+    .nav-right a.cta{background:var(--ink);color:#fff;} .nav-right a.cta:hover{background:#000;}
+
+    /* hero */
+    .hero{padding:clamp(44px,7vw,90px) 0 clamp(28px,4vw,48px);}
+    .hero h1{font-family:var(--serif);font-weight:400;font-size:clamp(42px,8vw,96px);line-height:.96;letter-spacing:-.02em;}
+    .hero h1 em{font-style:italic;color:var(--accent);}
+    .hero .sub{font-size:clamp(16px,1.7vw,20px);line-height:1.55;color:var(--body);max-width:60ch;margin:24px 0 0;}
+    .hero .sub b{color:var(--ink);font-weight:600;}
+    .hero .meta{display:flex;gap:10px;flex-wrap:wrap;margin-top:26px;}
+    .pill{font-family:var(--mono);font-size:12px;letter-spacing:.04em;color:var(--body);background:var(--paper);border:1px solid var(--line);border-radius:999px;padding:8px 14px;display:inline-flex;align-items:center;gap:8px;}
+    .pill .sw{width:9px;height:9px;border-radius:50%;}
+
+    /* ===== phone mockup ===== */
+    .phone{width:248px;margin:0 auto;}
+    .phone-shell{position:relative;background:#0c0c0d;border-radius:36px;padding:7px;box-shadow:0 22px 50px rgba(20,20,40,.22),0 3px 8px rgba(0,0,0,.18);cursor:pointer;
+      transition:transform .4s var(--e2),box-shadow .4s var(--e2);}
+    .phone-shell:hover{transform:translateY(-5px);box-shadow:0 32px 70px rgba(20,20,40,.28);}
+    .phone-screen{position:relative;width:234px;height:480px;border-radius:30px;overflow:hidden;background:#fff;}
+    .phone-screen iframe{position:absolute;top:0;left:0;width:390px;height:800px;border:0;transform:scale(.6);transform-origin:top left;pointer-events:none;}
+    .phone-notch{position:absolute;top:7px;left:50%;transform:translateX(-50%);width:96px;height:18px;background:#0c0c0d;border-radius:0 0 12px 12px;z-index:3;}
+    .phone-ovl{position:absolute;inset:0;z-index:4;display:flex;align-items:flex-end;justify-content:center;padding-bottom:20px;
+      background:linear-gradient(transparent 60%,rgba(0,0,0,.45));opacity:0;transition:opacity .3s var(--e2);border-radius:30px;}
+    .phone-shell:hover .phone-ovl{opacity:1;}
+    .phone-ovl .open{background:#fff;color:var(--ink);font-weight:700;font-size:12.5px;border-radius:999px;padding:9px 16px;display:inline-flex;align-items:center;gap:7px;box-shadow:0 6px 18px rgba(0,0,0,.25);}
+    .phone-ovl .open svg{width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2;}
+
+    /* ===== 3-up cards ===== */
+    .previews{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(20px,3vw,34px);padding-bottom:14px;}
+    @media(max-width:900px){.previews{grid-template-columns:1fr;max-width:330px;margin:0 auto;gap:44px;}}
+    .concept{display:flex;flex-direction:column;}
+    .concept .top{display:flex;align-items:center;gap:10px;margin-bottom:18px;justify-content:center;}
+    .concept .no{font-family:var(--mono);font-size:12px;color:#fff;width:28px;height:28px;border-radius:8px;display:grid;place-items:center;font-weight:700;}
+    .concept .nm{font-weight:700;color:var(--ink);font-size:16px;}
+    .concept .badge{font-family:var(--mono);font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;padding:4px 8px;border-radius:999px;border:1px solid var(--line);color:var(--muted);}
+    .concept .body{padding:20px 4px 0;display:flex;flex-direction:column;gap:13px;flex:1;}
+    .concept .tl{font-size:14.5px;color:var(--body);line-height:1.5;text-align:center;} .concept .tl b{color:var(--ink);}
+    .concept .feat{display:flex;flex-direction:column;gap:8px;}
+    .concept .feat .f{display:flex;gap:9px;font-size:13px;color:var(--muted);align-items:flex-start;}
+    .concept .feat .f svg{width:15px;height:15px;flex-shrink:0;margin-top:1px;stroke:currentColor;fill:none;stroke-width:1.7;}
+    .concept .feat .f b{color:var(--ink);font-weight:600;}
+    .concept .links{display:flex;gap:8px;margin-top:auto;padding-top:6px;}
+    .concept .links a{flex:1;text-align:center;font-size:13.5px;font-weight:600;padding:11px;border-radius:10px;transition:all .25s;}
+    .concept .links a.p{background:var(--ink);color:#fff;} .concept .links a.p:hover{background:#000;}
+    .concept .links a.s{border:1px solid var(--line);color:var(--body);} .concept .links a.s:hover{background:var(--wash);border-color:var(--line2);}
+
+    /* ===== section + matrix ===== */
+    .section{padding:clamp(50px,8vw,92px) 0;}
+    .seclabel{display:flex;align-items:center;gap:14px;margin-bottom:30px;}
+    .seclabel .ttl{font-family:var(--mono);font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);}
+    .seclabel .ln{flex:1;height:1px;background:var(--line);}
+    .section h2{font-family:var(--serif);font-weight:400;font-size:clamp(28px,4.4vw,50px);line-height:1.02;margin-bottom:34px;}
+    .section h2 em{font-style:italic;color:var(--accent);}
+
+    .matrix-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:16px;background:var(--paper);-webkit-overflow-scrolling:touch;}
+    table.matrix{width:100%;border-collapse:collapse;min-width:740px;}
+    table.matrix th,table.matrix td{padding:17px 18px;text-align:left;border-top:1px solid var(--line);vertical-align:top;}
+    table.matrix thead th{border-top:none;background:var(--paper);}
+    table.matrix thead .cn{display:flex;align-items:center;gap:9px;font-size:15px;color:var(--ink);font-weight:700;}
+    table.matrix thead .cn i{width:10px;height:10px;border-radius:3px;}
+    table.matrix thead .cd{font-family:var(--mono);font-size:10px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);margin-top:5px;font-weight:400;}
+    table.matrix td:first-child,table.matrix th:first-child{font-family:var(--mono);font-size:10.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);width:150px;background:var(--wash);}
+    table.matrix td{font-size:14px;color:var(--body);line-height:1.45;}
+    table.matrix td b{color:var(--ink);font-weight:600;}
+    table.matrix tbody tr:hover td{background:#fcfcfd;} table.matrix tbody tr:hover td:first-child{background:#f4f4f6;}
+    .scrollhint-m{font-family:var(--mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--faint);margin-top:12px;text-align:center;}
+    @media(min-width:820px){.scrollhint-m{display:none;}}
+
+    /* ===== one by one ===== */
+    .dive{display:grid;grid-template-columns:.9fr 1.1fr;gap:clamp(28px,5vw,70px);align-items:center;padding:clamp(38px,6vw,76px) 0;border-top:1px solid var(--line);}
+    .dive:nth-child(even){grid-template-columns:1.1fr .9fr;}
+    .dive:nth-child(even) .dive-media{order:-1;}
+    .dive>div,.dive-media{min-width:0;}
+    .dive-media{display:flex;justify-content:center;}
+    @media(max-width:780px){.dive,.dive:nth-child(even){grid-template-columns:1fr;}.dive:nth-child(even) .dive-media{order:0;}.dive-media{order:-1!important;margin-bottom:8px;}}
+    .dive-no{font-family:var(--mono);font-size:13px;color:#fff;width:38px;height:38px;border-radius:10px;display:grid;place-items:center;font-weight:700;margin-bottom:18px;}
+    .dive h3{font-family:var(--serif);font-weight:400;font-size:clamp(27px,3.6vw,42px);line-height:1.04;margin-bottom:8px;}
+    .dive .ds{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:20px;}
+    .dive p{font-size:15.5px;line-height:1.65;color:var(--body);margin:0 0 16px;max-width:46ch;} .dive p b{color:var(--ink);}
+    .dive .pts{display:flex;flex-direction:column;gap:11px;margin:20px 0 26px;}
+    .dive .pts .pt{display:flex;gap:11px;font-size:14px;color:var(--body);align-items:flex-start;}
+    .dive .pts .pt b{color:var(--ink);}
+    .dive .pts .pt .dt{width:7px;height:7px;border-radius:50%;flex-shrink:0;margin-top:7px;}
+    .dive .dlinks a{display:inline-flex;align-items:center;gap:8px;font-size:14px;font-weight:600;color:var(--ink);}
+    .dive .dlinks a svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;}
+    /* bigger phone for deep dives */
+    .phone.lg{width:300px;}
+    .phone.lg .phone-shell{border-radius:42px;padding:8px;}
+    .phone.lg .phone-screen{width:284px;height:584px;border-radius:36px;}
+    .phone.lg .phone-screen iframe{width:390px;height:802px;transform:scale(.7282);}
+    .phone.lg .phone-notch{width:116px;height:21px;}
+    .phone.lg .phone-ovl{border-radius:36px;}
+
+    /* take */
+    .take{background:var(--ink);color:#fff;border-radius:22px;padding:clamp(30px,5vw,60px);}
+    .take h2{color:#fff;} .take h2 em{color:var(--accent2);}
+    .take-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:28px;}
+    @media(max-width:760px){.take-grid{grid-template-columns:1fr;}}
+    .take-grid .t{border:1px solid rgba(255,255,255,.14);border-radius:14px;padding:22px;}
+    .take-grid .t .h{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent2);margin-bottom:12px;}
+    .take-grid .t b{color:#fff;font-size:17px;font-weight:700;display:block;margin-bottom:8px;}
+    .take-grid .t p{color:#c9c9d2;font-size:14px;line-height:1.55;margin:0;}
+
+    /* footer */
+    .ftr{border-top:1px solid var(--line);padding:32px 0;}
+    .ftr-in{display:flex;justify-content:space-between;flex-wrap:wrap;gap:14px;align-items:center;font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);}
+
+    .rv{opacity:0;transform:translateY(22px);transition:opacity .7s var(--e2),transform .7s var(--e2);}
+    .rv.in{opacity:1;transform:none;}
+    @media (prefers-reduced-motion: reduce){.rv{opacity:1;transform:none;}html{scroll-behavior:auto;}}
+  </style>
+</head>
+<body>
+  <!-- NAV -->
+  <nav class="nav">
+    <div class="wrap nav-in">
+      <a href="hub.html" class="brand"><span class="dot"></span>Penta</a>
+      <span class="tag">Seller page · mobile concepts</span>
+      <div class="nav-right">
+        <a href="concepts.html">Desktop ↗</a>
+        <a href="#matrix">Compare</a>
+        <a href="seller-profile-deck.html" class="cta">The deck ↗</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <header class="hero">
+    <div class="wrap">
+      <p class="eyebrow rv">Penta · Seller page exploration · Mobile · 2026</p>
+      <h1 class="rv" style="margin-top:18px">One seller,<br/><em>three</em> directions.<br/>On mobile.</h1>
+      <p class="sub rv">The same three concepts for Tommy Frank's seller page — rebuilt as native phone experiences. <b>Classic</b> is the conversion-first app profile. <b>Immersive</b> turns the portfolio into a scroll-driven dive. <b>Editorial Noir</b> reimagines it as a cinematic studio with its own design language. Tap any phone to open it live.</p>
+      <div class="meta rv">
+        <span class="pill"><span class="sw" style="background:var(--c1)"></span>01 · Classic</span>
+        <span class="pill"><span class="sw" style="background:var(--c2)"></span>02 · Immersive</span>
+        <span class="pill"><span class="sw" style="background:var(--c3)"></span>03 · Editorial Noir</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- 3-UP PHONE PREVIEWS -->
+  <section class="wrap" style="padding-bottom:clamp(36px,6vw,64px)">
+    <div class="previews">
+
+      <!-- 01 CLASSIC -->
+      <article class="concept rv">
+        <div class="top"><span class="no" style="background:var(--c1)">01</span><span class="nm">Classic</span><span class="badge">Penta DS</span></div>
+        <div class="phone">
+          <div class="phone-shell" data-open="profile-mobile.html">
+            <div class="phone-notch"></div>
+            <div class="phone-screen"><iframe src="profile-mobile.html" title="Classic mobile" loading="lazy" scrolling="no"></iframe></div>
+            <div class="phone-ovl"><span class="open">Open live <svg viewBox="0 0 24 24"><path d="M7 17 17 7M9 7h8v8" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div>
+          </div>
+        </div>
+        <div class="body">
+          <div class="tl">The <b>conversion-first</b> app profile — clean, trustworthy, familiar.</div>
+          <div class="feat">
+            <div class="f"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg><span><b>Tap-to-view gallery</b> — filter chips + lightbox</span></div>
+            <div class="f"><svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h10" stroke-linecap="round"/></svg><span><b>Sticky tabs</b> + scroll-spy, sticky contact bar</span></div>
+            <div class="f"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Monochrome Penta · full desktop parity</span></div>
+          </div>
+          <div class="links"><a class="p" href="profile-mobile.html" target="_blank" rel="noopener">Open live</a></div>
+        </div>
+      </article>
+
+      <!-- 02 IMMERSIVE -->
+      <article class="concept rv">
+        <div class="top"><span class="no" style="background:var(--c2)">02</span><span class="nm">Immersive</span><span class="badge">Penta DS</span></div>
+        <div class="phone">
+          <div class="phone-shell" data-open="profile-immersive-mobile.html">
+            <div class="phone-notch"></div>
+            <div class="phone-screen"><iframe src="profile-immersive-mobile.html" title="Immersive mobile" loading="lazy" scrolling="no"></iframe></div>
+            <div class="phone-ovl"><span class="open">Open live <svg viewBox="0 0 24 24"><path d="M7 17 17 7M9 7h8v8" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div>
+          </div>
+        </div>
+        <div class="body">
+          <div class="tl">Same system, <b>full-bleed</b> — the work zooms toward you as you scroll.</div>
+          <div class="feat">
+            <div class="f"><svg viewBox="0 0 24 24"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7" stroke-linecap="round" stroke-linejoin="round"/></svg><span><b>Scroll zoom-parallax</b> — dive into the portfolio</span></div>
+            <div class="f"><svg viewBox="0 0 24 24"><path d="M12 3v18M5 10l7-7 7 7" stroke-linecap="round" stroke-linejoin="round"/></svg><span><b>Scroll-driven</b> · dramatic &amp; cinematic</span></div>
+            <div class="f"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Wow moment · tap a frame for the lightbox</span></div>
+          </div>
+          <div class="links"><a class="p" href="profile-immersive-mobile.html" target="_blank" rel="noopener">Open live</a></div>
+        </div>
+      </article>
+
+      <!-- 03 EDITORIAL NOIR -->
+      <article class="concept rv">
+        <div class="top"><span class="no" style="background:var(--c3)">03</span><span class="nm">Editorial Noir</span><span class="badge" style="border-color:#e8d9b3;color:#9c7e44">New system</span></div>
+        <div class="phone">
+          <div class="phone-shell" data-open="profile-noir-mobile.html">
+            <div class="phone-notch"></div>
+            <div class="phone-screen"><iframe src="profile-noir-mobile.html" title="Editorial Noir mobile" loading="lazy" scrolling="no"></iframe></div>
+            <div class="phone-ovl"><span class="open">Open live <svg viewBox="0 0 24 24"><path d="M7 17 17 7M9 7h8v8" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div>
+          </div>
+        </div>
+        <div class="body">
+          <div class="tl">A <b>cinematic, gallery-grade studio</b> — its own dark, editorial design language.</div>
+          <div class="feat">
+            <div class="f"><svg viewBox="0 0 24 24"><path d="M3 12h18M8 7l-5 5 5 5M16 7l5 5-5 5" stroke-linecap="round" stroke-linejoin="round"/></svg><span><b>Swipe film-strip reel</b> + lightbox</span></div>
+            <div class="f"><svg viewBox="0 0 24 24"><path d="M12 2l2.4 5.6L20 8.3l-4 4 1 5.7L12 15l-5 3 1-5.7-4-4 5.6-.7z" stroke-linecap="round" stroke-linejoin="round"/></svg><span><b>Custom system</b> — serif + gold + grain</span></div>
+            <div class="f"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Premium creative brand · portfolio-forward</span></div>
+          </div>
+          <div class="links"><a class="p" href="profile-noir-mobile.html" target="_blank" rel="noopener">Open live</a></div>
+        </div>
+      </article>
+
+    </div>
+    <p class="eyebrow" style="text-align:center;margin-top:26px">Previews are live — tap a phone to open the full mobile page</p>
+  </section>
+
+  <!-- COMPARISON MATRIX -->
+  <section class="section" id="matrix" style="background:var(--paper);border-top:1px solid var(--line);border-bottom:1px solid var(--line);">
+    <div class="wrap">
+      <div class="seclabel rv"><span class="ttl">The differences</span><span class="ln"></span></div>
+      <h2 class="rv">Same seller. <em>Three</em> phones.</h2>
+      <div class="matrix-wrap rv">
+        <table class="matrix">
+          <thead><tr>
+            <th></th>
+            <th><div class="cn"><i style="background:var(--c1)"></i>01 · Classic</div><div class="cd">profile-mobile.html</div></th>
+            <th><div class="cn"><i style="background:var(--c2)"></i>02 · Immersive</div><div class="cd">profile-immersive-mobile.html</div></th>
+            <th><div class="cn"><i style="background:var(--c3)"></i>03 · Editorial Noir</div><div class="cd">profile-noir-mobile.html</div></th>
+          </tr></thead>
+          <tbody>
+            <tr><td>Design system</td><td><b>Penta</b> (Fiverr DS)</td><td><b>Penta</b>, full-bleed</td><td><b>Custom</b> — standalone</td></tr>
+            <tr><td>Mobile signature</td><td>Tap-to-view bento + lightbox</td><td><b>Scroll zoom-parallax</b> dive</td><td><b>Swipe film-strip</b> reel</td></tr>
+            <tr><td>Gallery</td><td>Filter chips · tap → lightbox</td><td>Layered images · scroll-to-zoom</td><td>Horizontal swipe · gold captions</td></tr>
+            <tr><td>Motion</td><td>Restrained · functional</td><td>Scroll-driven · dramatic</td><td>Reveals · parallax · count-ups</td></tr>
+            <tr><td>Navigation</td><td>Sticky tabs + scroll-spy</td><td>Anchored scroll</td><td>Numbered sections · serif bar</td></tr>
+            <tr><td>Typography</td><td>Macan (sans)</td><td>Macan (sans)</td><td><b>Fraunces</b> serif · Space Mono</td></tr>
+            <tr><td>Color</td><td>Ink #222 on white</td><td>Ink on white</td><td>OLED black + gold #caa86a</td></tr>
+            <tr><td>App chrome</td><td>App bar · sticky contact</td><td>App bar · sticky contact</td><td>Serif bar · gold contact</td></tr>
+            <tr><td>Personality</td><td>Trustworthy · neutral</td><td>Bold · attention-grabbing</td><td>Luxurious · gallery / agency</td></tr>
+            <tr><td>Best for</td><td><b>Default app profile</b> — convert &amp; reassure</td><td>A <b>wow</b> / hero spotlight</td><td><b>Premium</b> creative sellers</td></tr>
+            <tr><td>Risk / lift</td><td>Low — reuses the DS</td><td>Medium — new scroll behavior</td><td>Higher — a separate system</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="scrollhint-m">← Swipe the table sideways to compare →</p>
+    </div>
+  </section>
+
+  <!-- ONE BY ONE -->
+  <section class="section">
+    <div class="wrap">
+      <div class="seclabel rv"><span class="ttl">One by one</span><span class="ln"></span></div>
+
+      <div class="dive">
+        <div>
+          <div class="dive-no" style="background:var(--c1)">01</div>
+          <h3>Classic</h3>
+          <div class="ds">Penta design system · profile-mobile.html</div>
+          <p>The dependable marketplace profile, sized for the thumb — instantly familiar, fast, and built to <b>convert</b>. Full parity with the desktop Classic page.</p>
+          <div class="pts">
+            <div class="pt"><span class="dt" style="background:var(--c1)"></span><span><b>Cover hero</b> + trust stat-cards, AI fit-summary, reviews with sub-scores &amp; AI digest.</span></div>
+            <div class="pt"><span class="dt" style="background:var(--c1)"></span><span><b>Sticky tab bar</b> with scroll-spy · filterable gallery → full-screen lightbox.</span></div>
+            <div class="pt"><span class="dt" style="background:var(--c1)"></span><span>Sticky contact rail pinned to the bottom of the screen.</span></div>
+          </div>
+          <div class="dlinks"><a href="profile-mobile.html" target="_blank" rel="noopener">Open live <svg viewBox="0 0 24 24"><path d="M7 17 17 7M9 7h8v8" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
+        </div>
+        <div class="dive-media"><div class="phone lg"><div class="phone-shell" data-open="profile-mobile.html"><div class="phone-notch"></div><div class="phone-screen"><iframe src="profile-mobile.html" title="Classic mobile" loading="lazy" scrolling="no"></iframe></div><div class="phone-ovl"><span class="open">Open live <svg viewBox="0 0 24 24"><path d="M7 17 17 7M9 7h8v8" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div></div></div></div>
+      </div>
+
+      <div class="dive">
+        <div>
+          <div class="dive-no" style="background:var(--c2)">02</div>
+          <h3>Immersive</h3>
+          <div class="ds">Penta design system, full-bleed · profile-immersive-mobile.html</div>
+          <p>The same product, turned into an <b>experience</b>. As you scroll, the portfolio images zoom and dive toward you, then resolve into the full profile — a landing-page-grade moment that still does the marketplace job.</p>
+          <div class="pts">
+            <div class="pt"><span class="dt" style="background:var(--c2)"></span><span><b>Scroll-driven zoom-parallax</b> that runs natively inside the phone — not just a desktop fallback.</span></div>
+            <div class="pt"><span class="dt" style="background:var(--c2)"></span><span>Resolves into trust, AI fit, services and reviews below the dive.</span></div>
+            <div class="pt"><span class="dt" style="background:var(--c2)"></span><span>Tap any frame to open it in the lightbox · static grid on reduced-motion.</span></div>
+          </div>
+          <div class="dlinks"><a href="profile-immersive-mobile.html" target="_blank" rel="noopener">Open live <svg viewBox="0 0 24 24"><path d="M7 17 17 7M9 7h8v8" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
+        </div>
+        <div class="dive-media"><div class="phone lg"><div class="phone-shell" data-open="profile-immersive-mobile.html"><div class="phone-notch"></div><div class="phone-screen"><iframe src="profile-immersive-mobile.html" title="Immersive mobile" loading="lazy" scrolling="no"></iframe></div><div class="phone-ovl"><span class="open">Open live <svg viewBox="0 0 24 24"><path d="M7 17 17 7M9 7h8v8" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div></div></div></div>
+      </div>
+
+      <div class="dive">
+        <div>
+          <div class="dive-no" style="background:var(--c3)">03</div>
+          <h3>Editorial Noir</h3>
+          <div class="ds">Custom design system · profile-noir-mobile.html</div>
+          <p>A complete reimagining — a <b>cinematic, gallery-grade studio</b> with its own dark, editorial design language. Doesn't load the Fiverr DS at all: serif display, a single warm-gold accent, film grain.</p>
+          <div class="pts">
+            <div class="pt"><span class="dt" style="background:var(--c3)"></span><span><b>Swipe film-strip reel</b> — the mobile translation of the desktop pinned reel, with a gold progress bar.</span></div>
+            <div class="pt"><span class="dt" style="background:var(--c3)"></span><span><b>Fraunces serif</b> + Space Mono labels + gold accents + grain overlay.</span></div>
+            <div class="pt"><span class="dt" style="background:var(--c3)"></span><span>Still a real marketplace page — trust stats, AI fit, hire flow, sticky gold contact.</span></div>
+          </div>
+          <div class="dlinks"><a href="profile-noir-mobile.html" target="_blank" rel="noopener">Open live <svg viewBox="0 0 24 24"><path d="M7 17 17 7M9 7h8v8" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
+        </div>
+        <div class="dive-media"><div class="phone lg"><div class="phone-shell" data-open="profile-noir-mobile.html"><div class="phone-notch"></div><div class="phone-screen"><iframe src="profile-noir-mobile.html" title="Editorial Noir mobile" loading="lazy" scrolling="no"></iframe></div><div class="phone-ovl"><span class="open">Open live <svg viewBox="0 0 24 24"><path d="M7 17 17 7M9 7h8v8" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div></div></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TAKE -->
+  <section class="section" style="padding-top:0">
+    <div class="wrap">
+      <div class="take rv">
+        <div class="seclabel" style="margin-bottom:22px"><span class="ttl" style="color:#9a93c9">Which one, when</span><span class="ln" style="background:rgba(255,255,255,.16)"></span></div>
+        <h2>Pick by the <em>job</em>, not the looks.</h2>
+        <div class="take-grid">
+          <div class="t"><div class="h">Ship the app profile</div><b>→ Classic</b><p>Lowest risk, fully on-system, desktop parity. The safe default that converts and reassures on the phone.</p></div>
+          <div class="t"><div class="h">Make people stop</div><b>→ Immersive</b><p>For a hero seller or a "featured creator" spotlight — the scroll-dive earns attention right in the feed.</p></div>
+          <div class="t"><div class="h">Sell a premium brand</div><b>→ Editorial Noir</b><p>For top-tier creative sellers where the page itself is part of the portfolio. A distinct, ownable identity.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="ftr"><div class="wrap ftr-in"><span>Fiverr Penta · Seller page concepts · Mobile</span><span>Classic · Immersive · Editorial Noir — 2026</span></div></footer>
+
+  <script>
+    (function(){
+      var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+      var rvs=[].slice.call(document.querySelectorAll('.rv'));
+      function inView(el){ var r=el.getBoundingClientRect(); return r.top < innerHeight*0.94 && r.bottom > 0; }
+      if('IntersectionObserver' in window && !reduce){
+        var io=new IntersectionObserver(function(es){es.forEach(function(e){ if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);} });},{threshold:.12});
+        rvs.forEach(function(el){ if(inView(el)) el.classList.add('in'); else io.observe(el); });
+        setTimeout(function(){ rvs.forEach(function(el){el.classList.add('in');}); }, 2200);
+      } else { rvs.forEach(function(el){el.classList.add('in');}); }
+      document.querySelectorAll('[data-open]').forEach(function(el){ el.addEventListener('click',function(){ window.open(el.dataset.open,'_blank','noopener'); }); });
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tommy Frank — Studio (Mobile) · Editorial Noir</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..500&family=Hanken+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg:#0a0a0b; --bg2:#0f0f11; --card:#141416; --card2:#1a1a1d;
+      --line:rgba(255,255,255,.085); --line-gold:rgba(202,168,106,.26);
+      --ink:#f6f2ea; --ink2:#c8c2b5; --muted:#8d8678; --faint:#5e594f;
+      --gold:#caa86a; --gold-2:#e7d09b; --gold-deep:#9c7e44;
+      --serif:'Fraunces',Georgia,'Times New Roman',serif;
+      --sans:'Hanken Grotesk','Helvetica Neue',Arial,sans-serif;
+      --mono:'Space Mono','SFMono-Regular',monospace;
+      --e2:cubic-bezier(.16,1,.3,1);
+    }
+    *{box-sizing:border-box;}
+    html,body{margin:0;height:100%;}
+    /* light outer stage to set off the dark phone */
+    body{font-family:var(--sans);color:var(--ink2);
+      background:radial-gradient(90% 60% at 50% 0%, #1b1916 0%, rgba(20,18,16,0) 60%), #d9d6cf;
+      -webkit-font-smoothing:antialiased;display:flex;flex-direction:column;align-items:center;min-height:100%;padding:34px 16px;gap:16px;}
+
+    .page-cap{max-width:430px;text-align:center;color:#6b675f;font-size:13px;}
+    .page-cap b{color:#2a2722;}
+
+    /* device frame */
+    .device{width:390px;max-width:100%;height:824px;background:#000;border-radius:46px;
+      padding:10px;box-shadow:0 34px 90px rgba(0,0,0,.5),0 4px 12px rgba(0,0,0,.4);position:relative;flex-shrink:0;}
+    .screen{position:relative;width:100%;height:100%;background:var(--bg);border-radius:38px;overflow:hidden;display:flex;flex-direction:column;}
+    .notch{position:absolute;top:0;left:50%;transform:translateX(-50%);width:140px;height:26px;background:#000;border-radius:0 0 16px 16px;z-index:40;}
+    .statusbar{height:44px;display:flex;align-items:flex-end;justify-content:space-between;padding:0 22px 6px;font-size:13px;font-weight:600;color:var(--ink);flex-shrink:0;}
+
+    /* film grain inside the screen */
+    .grain{position:absolute;inset:0;z-index:70;pointer-events:none;opacity:.05;mix-blend-mode:overlay;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");}
+
+    /* app bar */
+    .appbar{height:52px;display:flex;align-items:center;justify-content:space-between;padding:0 16px;
+      border-bottom:1px solid var(--line);flex-shrink:0;background:rgba(10,10,11,.85);backdrop-filter:blur(10px);z-index:30;}
+    .brand{font-family:var(--serif);font-size:20px;color:var(--ink);font-weight:500;letter-spacing:-.01em;}
+    .brand .d{color:var(--gold);}
+    .status{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);display:flex;align-items:center;gap:6px;}
+    .status i{width:6px;height:6px;border-radius:50%;background:#69d39a;box-shadow:0 0 8px #69d39a;}
+
+    .scroll{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;scroll-behavior:smooth;position:relative;}
+    .scroll::-webkit-scrollbar{display:none;}
+
+    .wrap{padding:0 22px;}
+    .eyebrow{font-family:var(--mono);font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:var(--gold);}
+    h1,h2,h3{font-family:var(--serif);color:var(--ink);font-weight:400;margin:0;line-height:1.04;letter-spacing:-.01em;}
+    .gold{color:var(--gold);}
+    .screen a{color:inherit;text-decoration:none;}
+
+    section.band{padding:42px 0;position:relative;}
+    .seclabel{display:flex;align-items:center;gap:12px;margin-bottom:24px;padding:0 22px;}
+    .seclabel .no{font-family:var(--mono);font-size:11px;color:var(--gold);}
+    .seclabel .ttl{font-family:var(--mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);}
+    .seclabel .line{flex:1;height:1px;background:var(--line);}
+
+    /* buttons */
+    .btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;font-family:var(--sans);font-weight:600;font-size:14px;
+      padding:13px 20px;border-radius:999px;cursor:pointer;border:1px solid transparent;transition:transform .3s var(--e2),background .3s;}
+    .btn .arw{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;}
+    .btn .arw svg{width:13px;height:13px;fill:none;stroke-width:1.7;}
+    .btn.gold{background:var(--gold);color:#15100a;} .btn.gold .arw{background:rgba(0,0,0,.16);} .btn.gold .arw svg{stroke:#15100a;}
+    .btn.ghost{background:transparent;color:var(--ink);border-color:var(--line);} .btn.ghost .arw{background:rgba(255,255,255,.06);} .btn.ghost .arw svg{stroke:var(--ink);}
+    .btn:active{transform:scale(.97);}
+
+    /* ===== HERO ===== */
+    .hero{position:relative;padding:34px 22px 30px;overflow:hidden;}
+    .hero-glow{position:absolute;top:-30%;right:-20%;width:90%;height:60%;border-radius:50%;
+      background:radial-gradient(circle,rgba(202,168,106,.18),transparent 62%);filter:blur(14px);z-index:0;pointer-events:none;}
+    .hero-in{position:relative;z-index:2;}
+    .hero-eye{display:flex;align-items:center;gap:10px;margin-bottom:18px;}
+    .hero-eye .ava{width:34px;height:34px;border-radius:50%;object-fit:cover;border:1px solid var(--line-gold);}
+    .hero h1{font-size:62px;line-height:.9;font-weight:340;letter-spacing:-.025em;}
+    .hero h1 em{font-style:italic;font-weight:300;color:var(--gold-2);}
+    .hero .sub{font-family:var(--sans);font-size:15px;color:var(--ink2);margin-top:16px;line-height:1.5;}
+    .hero .meta{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;margin-top:18px;font-family:var(--mono);font-size:11px;letter-spacing:.04em;color:var(--muted);}
+    .hero .meta .v{color:var(--ink);} .hero .meta .star{color:var(--gold);}
+    .hero .meta .dot{width:3px;height:3px;border-radius:50%;background:var(--faint);}
+    /* hero plate */
+    .plate{position:relative;margin-top:24px;border-radius:4px;padding:8px;background:linear-gradient(160deg,rgba(202,168,106,.2),rgba(255,255,255,.03));box-shadow:0 26px 60px rgba(0,0,0,.55);}
+    .plate-in{position:relative;border-radius:2px;overflow:hidden;aspect-ratio:16/10;background:#111;}
+    .plate-in img{width:100%;height:112%;object-fit:cover;will-change:transform;}
+    .plate-cap{position:absolute;left:12px;bottom:11px;font-family:var(--mono);font-size:10px;letter-spacing:.06em;color:#f6f2ea;text-shadow:0 1px 8px rgba(0,0,0,.7);}
+    .plate-cap b{color:var(--gold-2);}
+    .plate-no{position:absolute;top:10px;right:12px;font-family:var(--mono);font-size:10px;color:rgba(255,255,255,.6);}
+    .hero .cta{display:flex;gap:10px;margin-top:22px;}
+    .hero .cta .btn{flex:1;}
+
+    /* ===== TRUST STATS ===== */
+    .stats{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--line);border-bottom:1px solid var(--line);}
+    .stats .c{padding:20px 14px;border-left:1px solid var(--line);}
+    .stats .c:nth-child(3n+1){border-left:none;}
+    .stats .c:nth-child(n+4){border-top:1px solid var(--line);}
+    .stats .c b{font-family:var(--serif);font-size:30px;font-weight:340;color:var(--ink);display:block;line-height:1;letter-spacing:-.02em;}
+    .stats .c b .u{color:var(--gold);font-size:.6em;}
+    .stats .c span{font-family:var(--mono);font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-top:9px;display:block;}
+
+    /* ===== AI FIT ===== */
+    .ai{border-radius:16px;padding:1px;background:linear-gradient(135deg,var(--line-gold),rgba(255,255,255,.05) 45%,var(--line-gold));margin:0 22px;}
+    .ai-in{background:linear-gradient(180deg,#141315,#101011);border-radius:15px;padding:20px;position:relative;overflow:hidden;}
+    .ai-in::before{content:"";position:absolute;top:-40%;left:-10%;width:60%;height:120%;background:radial-gradient(circle,rgba(202,168,106,.1),transparent 65%);pointer-events:none;}
+    .ai-h{display:flex;align-items:center;gap:11px;position:relative;}
+    .ai-spark{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;font-size:14px;color:#15100a;background:linear-gradient(135deg,var(--gold-2),var(--gold));box-shadow:0 5px 18px rgba(202,168,106,.35);}
+    .ai-h h3{font-size:20px;}
+    .ai-tag{margin-left:auto;font-family:var(--mono);font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);border:1px solid var(--line-gold);border-radius:999px;padding:4px 9px;}
+    .ai-sub{font-size:13.5px;color:var(--ink2);margin:14px 0 16px;line-height:1.55;}
+    .ai-chips{display:flex;gap:8px;flex-wrap:wrap;}
+    .ai-chip{font-family:var(--sans);font-size:12.5px;color:var(--ink);background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:999px;padding:9px 14px;cursor:pointer;transition:all .3s var(--e2);}
+    .ai-chip:active{transform:scale(.96);}
+    .ai-out{margin-top:18px;border-top:1px solid var(--line);padding-top:18px;display:none;}
+    .ai-out.show{display:block;}
+    .ai-think .tlabel{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--gold);display:flex;align-items:center;gap:8px;margin-bottom:12px;}
+    .ai-think .pulse{width:7px;height:7px;border-radius:50%;background:var(--gold);animation:pul 1s var(--e2) infinite;}
+    @keyframes pul{0%,100%{opacity:.3;transform:scale(.8)}50%{opacity:1;transform:scale(1.2)}}
+    .ai-think .ln{height:11px;border-radius:6px;margin-bottom:10px;background:linear-gradient(90deg,#1d1c1f 25%,#272529 37%,#1d1c1f 63%);background-size:400% 100%;animation:shim 1.3s linear infinite;}
+    .ai-think .w90{width:90%}.ai-think .w70{width:70%}.ai-think .w45{width:45%}
+    @keyframes shim{0%{background-position:100% 0}100%{background-position:-100% 0}}
+    .ai-res{animation:rise .6s var(--e2);}
+    @keyframes rise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+    .ai-verdict{font-size:15px;line-height:1.6;color:var(--ink2);margin:0 0 16px;} .ai-verdict b{color:var(--ink);font-weight:600;}
+    .ai-why{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px;}
+    .ai-why .w{font-family:var(--mono);font-size:11px;color:var(--gold-2);border:1px solid var(--line-gold);border-radius:999px;padding:6px 11px;display:inline-flex;align-items:center;gap:7px;}
+    .ai-why .w svg{width:12px;height:12px;stroke:var(--gold);fill:none;stroke-width:2;}
+    .ai-rec{display:flex;align-items:center;gap:14px;flex-wrap:wrap;border:1px solid var(--line-gold);border-radius:13px;padding:16px;background:rgba(202,168,106,.05);}
+    .ai-rec .rl{font-family:var(--mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);}
+    .ai-rec .rp{font-family:var(--serif);font-size:20px;color:var(--ink);margin-top:4px;} .ai-rec .rp .pr{color:var(--gold);}
+    .ai-rec a{margin-left:auto;}
+    .ai-src{font-family:var(--mono);font-size:10px;color:var(--faint);margin-top:14px;letter-spacing:.04em;} .ai-src b{color:var(--gold);}
+
+    /* ===== PORTFOLIO REEL — horizontal swipe film-strip ===== */
+    .reel-head{padding:0 22px;margin-bottom:18px;}
+    .reel-head h2{font-size:34px;font-weight:340;letter-spacing:-.02em;}
+    .reel-head p{font-family:var(--mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:10px 0 0;display:flex;align-items:center;gap:8px;}
+    .reel-head p .ar{color:var(--gold);}
+    .reel{display:flex;gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;padding:0 22px 8px;-webkit-overflow-scrolling:touch;}
+    .reel::-webkit-scrollbar{display:none;}
+    .reel-plate{flex:0 0 auto;width:75%;scroll-snap-align:center;position:relative;aspect-ratio:3/4;border-radius:4px;overflow:hidden;background:#111;box-shadow:0 20px 50px rgba(0,0,0,.5);cursor:pointer;}
+    .reel-plate img{width:100%;height:100%;object-fit:cover;filter:grayscale(.12) contrast(1.02);}
+    .reel-plate .num{position:absolute;top:14px;left:15px;font-family:var(--mono);font-size:11px;color:rgba(255,255,255,.65);}
+    .reel-plate .cap{position:absolute;left:0;right:0;bottom:0;padding:42px 18px 16px;background:linear-gradient(transparent,rgba(0,0,0,.84));}
+    .reel-plate .cap .t{font-family:var(--serif);font-size:21px;color:#fff;line-height:1.1;}
+    .reel-plate .cap .m{font-family:var(--mono);font-size:10px;letter-spacing:.06em;color:var(--gold-2);margin-top:6px;text-transform:uppercase;}
+    .reel-progress{margin:16px 22px 0;height:2px;background:var(--line);position:relative;overflow:hidden;}
+    .reel-progress>i{position:absolute;left:0;top:0;height:100%;width:30%;background:var(--gold);transition:transform .15s linear;transform-origin:left;}
+
+    /* ===== ABOUT ===== */
+    .about h2{font-size:34px;font-weight:340;margin-bottom:20px;padding:0 22px;} .about h2 em{font-style:italic;color:var(--gold-2);}
+    .bio{padding:0 22px;} .bio p{font-size:15px;line-height:1.7;color:var(--ink2);margin:0 0 16px;} .bio p b{color:var(--ink);}
+    .tags{display:flex;gap:8px;flex-wrap:wrap;padding:0 22px;margin-top:4px;}
+    .tag{font-family:var(--mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:7px 12px;}
+    .facts{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);border-top:1px solid var(--line);border-bottom:1px solid var(--line);margin-top:26px;}
+    .facts .f{background:var(--bg);padding:18px 22px;}
+    .facts .f span{font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);}
+    .facts .f b{font-family:var(--serif);font-size:19px;color:var(--ink);font-weight:400;display:block;margin-top:7px;}
+
+    /* ===== SERVICES ===== */
+    .gigs{display:flex;flex-direction:column;gap:14px;padding:0 22px;}
+    .gig{border:1px solid var(--line);border-radius:6px;overflow:hidden;background:var(--bg2);cursor:pointer;display:flex;flex-direction:column;}
+    .gig .im{aspect-ratio:16/9;overflow:hidden;background:#111;} .gig .im img{width:100%;height:100%;object-fit:cover;filter:grayscale(.2) contrast(1.02);}
+    .gig .b{padding:18px;}
+    .gig .t{font-family:var(--serif);font-size:19px;color:var(--ink);line-height:1.25;}
+    .gig .r{font-family:var(--mono);font-size:10px;letter-spacing:.06em;color:var(--muted);margin:11px 0 16px;} .gig .r .s{color:var(--gold);}
+    .gig .p{border-top:1px solid var(--line);padding-top:14px;display:flex;align-items:baseline;justify-content:space-between;}
+    .gig .p .lbl{font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);}
+    .gig .p .amt{font-family:var(--serif);font-size:24px;color:var(--gold);}
+
+    /* ===== REVIEWS ===== */
+    .rev-head{display:flex;gap:20px;align-items:center;padding:0 22px;margin-bottom:26px;}
+    .rev-score{text-align:center;flex-shrink:0;}
+    .rev-score b{font-family:var(--serif);font-size:62px;font-weight:300;color:var(--ink);line-height:.9;display:block;}
+    .rev-score .st{color:var(--gold);font-size:13px;letter-spacing:2px;margin-top:4px;} .rev-score .ct{font-family:var(--mono);font-size:9px;color:var(--muted);letter-spacing:.08em;margin-top:8px;text-transform:uppercase;}
+    .dist{flex:1;display:flex;flex-direction:column;gap:8px;}
+    .dist .row{display:flex;align-items:center;gap:10px;font-family:var(--mono);font-size:10px;color:var(--muted);}
+    .dist .row .l{width:24px;} .dist .row .pc{width:32px;text-align:right;}
+    .dist .row .tk{flex:1;height:2px;background:var(--line);overflow:hidden;} .dist .row .tk i{display:block;height:100%;width:0;background:var(--gold);transition:width 1.1s var(--e2);}
+    .digest{border:1px solid var(--line-gold);border-radius:13px;padding:18px;margin:0 22px 24px;background:rgba(202,168,106,.04);}
+    .digest .dh{display:flex;align-items:center;gap:9px;font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--gold);margin-bottom:12px;}
+    .digest .dh .ai-spark{width:22px;height:22px;border-radius:7px;font-size:12px;}
+    .digest p{font-size:14px;line-height:1.6;color:var(--ink2);margin:0 0 12px;} .digest p b{color:var(--ink);}
+    .digest .dc{display:flex;gap:8px;flex-wrap:wrap;} .digest .dc span{font-family:var(--mono);font-size:10px;color:var(--gold-2);border:1px solid var(--line);border-radius:999px;padding:5px 10px;}
+    .review{padding:22px;border-top:1px solid var(--line);}
+    .review .who{font-family:var(--mono);display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:10px;}
+    .review .who .nm{font-size:12px;color:var(--ink);letter-spacing:.04em;} .review .who .cn{font-size:10px;color:var(--muted);} .review .who .dt{font-size:10px;color:var(--faint);margin-left:auto;}
+    .review .st{color:var(--gold);font-size:11px;letter-spacing:2px;margin-bottom:10px;}
+    .review p{font-size:16px;line-height:1.55;color:var(--ink2);margin:0;font-family:var(--serif);font-weight:300;}
+
+    /* ===== CONTACT ===== */
+    .contact{position:relative;text-align:center;padding:60px 22px;overflow:hidden;}
+    .contact-glow{position:absolute;inset:0;z-index:0;background:radial-gradient(70% 80% at 50% 100%,rgba(202,168,106,.16),transparent 70%);pointer-events:none;}
+    .contact .eyebrow{margin-bottom:18px;display:block;}
+    .contact h2{font-size:46px;font-weight:300;position:relative;z-index:2;} .contact h2 em{font-style:italic;color:var(--gold-2);}
+    .contact .cta{display:flex;flex-direction:column;gap:12px;margin-top:30px;position:relative;z-index:2;}
+    .contact .re{font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-top:22px;display:flex;align-items:center;justify-content:center;gap:8px;}
+    .contact .re i{width:6px;height:6px;border-radius:50%;background:#69d39a;box-shadow:0 0 8px #69d39a;}
+
+    .ftr{border-top:1px solid var(--line);padding:24px 22px;}
+    .ftr-in{font-family:var(--mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);text-align:center;line-height:1.8;}
+
+    /* sticky contact bar */
+    .cta-bar{flex-shrink:0;border-top:1px solid var(--line);background:rgba(10,10,11,.92);backdrop-filter:blur(10px);
+      padding:11px 16px calc(11px + env(safe-area-inset-bottom));display:flex;align-items:center;gap:12px;z-index:35;}
+    .cta-bar .who{flex:1;min-width:0;}
+    .cta-bar .who .l1{font-family:var(--serif);font-size:16px;color:var(--ink);}
+    .cta-bar .who .l2{font-family:var(--mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-top:3px;display:flex;align-items:center;gap:6px;}
+    .cta-bar .who .l2 i{width:6px;height:6px;border-radius:50%;background:#69d39a;box-shadow:0 0 8px #69d39a;}
+
+    /* lightbox */
+    .lb{position:absolute;inset:0;z-index:90;background:rgba(6,6,7,.95);display:none;align-items:center;justify-content:center;padding:24px;}
+    .lb.show{display:flex;}
+    .lb img{max-width:100%;max-height:80%;border-radius:4px;box-shadow:0 30px 80px rgba(0,0,0,.7);}
+    .lb .x{position:absolute;top:18px;right:20px;width:40px;height:40px;border-radius:50%;border:1px solid var(--line);background:transparent;color:var(--ink);font-size:17px;cursor:pointer;}
+
+    /* reveal */
+    .rv{opacity:0;transform:translateY(20px);filter:blur(5px);transition:opacity .8s var(--e2),transform .8s var(--e2),filter .8s var(--e2);}
+    .rv.in{opacity:1;transform:none;filter:none;}
+    @media (prefers-reduced-motion: reduce){*{scroll-behavior:auto!important;animation:none!important;} .rv{opacity:1;transform:none;filter:none;}}
+    @media(max-width:430px){
+      body{padding:0;}
+      .device{width:100%;height:100vh;height:100dvh;border-radius:0;padding:0;box-shadow:none;}
+      .screen{border-radius:0;} .notch{display:none;} .page-cap{display:none;}
+    }
+  </style>
+</head>
+<body>
+  <div class="page-cap">Mobile · <b>Editorial Noir concept — Tommy Frank</b> · its own dark, serif, gold design language</div>
+
+  <div class="device">
+    <div class="notch"></div>
+    <div class="screen">
+      <div class="grain"></div>
+      <div class="statusbar"><span>9:41</span><span>5G&nbsp;&nbsp;100%</span></div>
+
+      <div class="appbar">
+        <a href="hub.html" class="brand">fiverr<span class="d">.</span></a>
+        <span class="status"><i></i>Online · ~1h</span>
+      </div>
+
+      <div class="scroll" id="scroll">
+
+        <!-- HERO -->
+        <header class="hero">
+          <div class="hero-glow"></div>
+          <div class="hero-in">
+            <div class="hero-eye rv"><img class="ava" src="design-system/assets/up@2x.png" alt="Tommy Frank" /><span class="eyebrow">✦ Verified Pro</span></div>
+            <h1 class="rv">Tommy<br/><em>Frank</em></h1>
+            <p class="sub rv">Cyberpunk &amp; sci-fi illustrator — cinematic, story-driven worlds for film, games &amp; editorial.</p>
+            <div class="meta rv">
+              <span class="star">★ <span class="v">4.9</span></span><span>612 reviews</span>
+              <span class="dot"></span><span>France</span><span class="dot"></span><span>EN · FR</span>
+              <span class="dot"></span><span>8+ yrs</span>
+            </div>
+            <div class="plate rv" id="heroPlate">
+              <div class="plate-in"><img src="design-system/assets/Gigs/image4.png" alt="Featured work" id="heroImg" /><span class="plate-no">001 / 612</span><span class="plate-cap"><b>Neon District</b> — key visual · 2025</span></div>
+            </div>
+            <div class="cta rv">
+              <button class="btn gold" data-contact>Contact me <span class="arw"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg></span></button>
+              <a class="btn ghost" href="#work">Portfolio <span class="arw"><svg viewBox="0 0 24 24"><path d="M7 17 17 7M9 7h8v8" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a>
+            </div>
+          </div>
+        </header>
+
+        <!-- TRUST STATS -->
+        <section class="band" style="padding:0;" aria-label="Trust">
+          <div class="stats rv">
+            <div class="c"><b class="tnum" data-c="4.9">4.9<span class="u">★</span></b><span>Rating</span></div>
+            <div class="c"><b>1<span class="u">h</span></b><span>Avg response</span></div>
+            <div class="c"><b class="tnum" data-c="99" data-suffix="%">99%</b><span>On-time</span></div>
+            <div class="c"><b>~3<span class="u">h</span></b><span>Last delivery</span></div>
+            <div class="c"><b class="tnum" data-c="40" data-suffix="+">40+</b><span>Countries</span></div>
+            <div class="c"><b class="tnum" data-c="612">612</b><span>Projects</span></div>
+          </div>
+        </section>
+
+        <!-- AI FIT -->
+        <section class="band">
+          <div class="ai rv">
+            <div class="ai-in">
+              <div class="ai-h"><span class="ai-spark">✦</span><h3>Is Tommy right for you?</h3><span class="ai-tag">AI</span></div>
+              <p class="ai-sub">Tell me the brief — I'll read his portfolio, reviews and skills, and recommend the package that fits.</p>
+              <div class="ai-chips" id="aiChips">
+                <button class="ai-chip" data-k="bookcover">Dark sci-fi book cover</button>
+                <button class="ai-chip" data-k="game">Game key art</button>
+                <button class="ai-chip" data-k="album">Album artwork</button>
+                <button class="ai-chip" data-k="character">Character design</button>
+              </div>
+              <div class="ai-out" id="aiOut" aria-live="polite"></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- PORTFOLIO REEL -->
+        <section class="band" id="work">
+          <div class="seclabel rv"><span class="no">02</span><span class="ttl">Selected work</span><span class="line"></span></div>
+          <div class="reel-head rv">
+            <h2>A reel of recent worlds.</h2>
+            <p>Swipe through the gallery <span class="ar">→</span></p>
+          </div>
+          <div class="reel" id="reel">
+            <div class="reel-plate" data-img="design-system/assets/Gigs/image4.png"><span class="num">01</span><img src="design-system/assets/Gigs/image4.png" alt="Neon District"><div class="cap"><div class="t">Neon District</div><div class="m">Key visual · Cyberpunk · 2025</div></div></div>
+            <div class="reel-plate" data-img="design-system/assets/Gigs/image1.png"><span class="num">02</span><img src="design-system/assets/Gigs/image1.png" alt="Void Runner"><div class="cap"><div class="t">Void Runner</div><div class="m">Book cover · Sci-fi · 2024</div></div></div>
+            <div class="reel-plate" data-img="design-system/assets/Gigs/image3.png"><span class="num">03</span><img src="design-system/assets/Gigs/image3.png" alt="Ronin 2099"><div class="cap"><div class="t">Ronin 2099</div><div class="m">Game key art · 2024</div></div></div>
+            <div class="reel-plate" data-img="design-system/assets/Gigs/image.png"><span class="num">04</span><img src="design-system/assets/Gigs/image.png" alt="Synth City"><div class="cap"><div class="t">Synth City</div><div class="m">Concept · Editorial · 2023</div></div></div>
+            <div class="reel-plate" data-img="design-system/assets/Gigs/image5.png"><span class="num">05</span><img src="design-system/assets/Gigs/image5.png" alt="Last Signal"><div class="cap"><div class="t">Last Signal</div><div class="m">Album cover · 2023</div></div></div>
+          </div>
+          <div class="reel-progress"><i id="reelProg"></i></div>
+        </section>
+
+        <!-- ABOUT -->
+        <section class="band about" id="about">
+          <div class="seclabel rv"><span class="no">03</span><span class="ttl">The studio</span><span class="line"></span></div>
+          <h2 class="rv">Atmospheric,<br/>story-driven<br/><em>by design.</em></h2>
+          <div class="bio rv">
+            <p>Professional cyberpunk &amp; sci-fi illustrator with <b>8+ years</b> across the film, game, and editorial industries. I've worked with clients from <b>40+ countries</b>, elevating projects through strong visual direction and a cinematic mood.</p>
+            <p>Recent work includes concept art and key visuals for indie game studios, book covers, and album artwork — plus high-profile projects under NDA.</p>
+          </div>
+          <div class="tags rv">
+            <span class="tag">Concept art</span><span class="tag">Key visuals</span><span class="tag">Character design</span><span class="tag">Cover art</span><span class="tag">Matte painting</span><span class="tag">Photoshop</span><span class="tag">Procreate</span>
+          </div>
+          <div class="facts rv">
+            <div class="f"><span>From</span><b>France</b></div>
+            <div class="f"><span>Member since</span><b>2020</b></div>
+            <div class="f"><span>Avg response</span><b>1 hour</b></div>
+            <div class="f"><span>Languages</span><b>EN · FR</b></div>
+          </div>
+        </section>
+
+        <!-- SERVICES -->
+        <section class="band" id="services" style="background:var(--bg2);border-top:1px solid var(--line);border-bottom:1px solid var(--line);">
+          <div class="seclabel rv"><span class="no">04</span><span class="ttl">Commission</span><span class="line"></span></div>
+          <h2 class="rv" style="padding:0 22px;font-size:34px;font-weight:340;margin-bottom:24px;">Hire the studio.</h2>
+          <div class="gigs">
+            <a class="gig rv" href="index.html"><div class="im"><img src="design-system/assets/Gigs/image.png" alt=""></div>
+              <div class="b"><div class="t">Cyberpunk or sci-fi illustration</div><div class="r"><span class="s">★ 4.9</span> · 612 reviews</div><div class="p"><span class="lbl">From</span><span class="amt">$35</span></div></div></a>
+            <a class="gig rv" href="index.html"><div class="im"><img src="design-system/assets/Gigs/image1.png" alt=""></div>
+              <div class="b"><div class="t">Sci-fi book or album cover</div><div class="r"><span class="s">★ 5.0</span> · 188 reviews</div><div class="p"><span class="lbl">From</span><span class="amt">$85</span></div></div></a>
+            <a class="gig rv" href="index.html"><div class="im"><img src="design-system/assets/Gigs/image3.png" alt=""></div>
+              <div class="b"><div class="t">Cinematic game key art &amp; concept</div><div class="r"><span class="s">★ 4.9</span> · 211 reviews</div><div class="p"><span class="lbl">From</span><span class="amt">$150</span></div></div></a>
+          </div>
+        </section>
+
+        <!-- REVIEWS -->
+        <section class="band" id="reviews">
+          <div class="seclabel rv"><span class="no">05</span><span class="ttl">Acclaim</span><span class="line"></span></div>
+          <div class="rev-head rv">
+            <div class="rev-score"><b>4.9</b><div class="st">★★★★★</div><div class="ct">612 reviews</div></div>
+            <div class="dist" id="dist">
+              <div class="row"><span class="l">5★</span><span class="tk"><i data-w="94"></i></span><span class="pc">94%</span></div>
+              <div class="row"><span class="l">4★</span><span class="tk"><i data-w="4"></i></span><span class="pc">4%</span></div>
+              <div class="row"><span class="l">3★</span><span class="tk"><i data-w="1"></i></span><span class="pc">1%</span></div>
+              <div class="row"><span class="l">2★</span><span class="tk"><i data-w="1"></i></span><span class="pc">1%</span></div>
+              <div class="row"><span class="l">1★</span><span class="tk"><i data-w="0"></i></span><span class="pc">0%</span></div>
+            </div>
+          </div>
+          <div class="digest rv">
+            <div class="dh"><span class="ai-spark">✦</span> AI summary of 612 reviews</div>
+            <p>Clients consistently praise Tommy's <b>speed</b> (replies within the hour), his <b>color and detail</b>, and <b>clear communication</b>. Complex briefs go best when scope is shared up front.</p>
+            <div class="dc"><span>Speed · 1h replies</span><span>Color &amp; detail</span><span>Communication</span></div>
+          </div>
+          <div class="review rv"><div class="who"><span class="nm">marcus_dev</span><span class="cn">🇺🇸 United States</span><span class="dt">2 days ago</span></div>
+            <div class="st">★★★★★</div><p>“Unreal turnaround and the cyberpunk mood was exactly what we pitched. Replied within the hour every time — the key visual is now our store hero.”</p></div>
+          <div class="review rv"><div class="who"><span class="nm">aria.studio</span><span class="cn">🇬🇧 United Kingdom</span><span class="dt">1 week ago</span></div>
+            <div class="st">★★★★★</div><p>“Our book cover got double the pre-orders. Color and detail are on another level and the file was print-ready. Will commission again.”</p></div>
+        </section>
+
+        <!-- CONTACT -->
+        <section class="contact" id="contact">
+          <div class="contact-glow"></div>
+          <div class="rv">
+            <span class="eyebrow">Available for select projects</span>
+            <h2>Let's build a<br/><em>world</em> together.</h2>
+            <div class="cta">
+              <button class="btn gold" data-contact>Contact me <span class="arw"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg></span></button>
+              <button class="btn ghost">Get a quote <span class="arw"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14" stroke-linecap="round" stroke-linejoin="round"/></svg></span></button>
+            </div>
+            <div class="re"><i></i>Pro talent · usually responds within an hour</div>
+          </div>
+        </section>
+
+        <footer class="ftr"><div class="ftr-in">Fiverr Penta · Tommy Frank Studio<br/>Editorial Noir — concept · 2026</div></footer>
+
+      </div>
+
+      <!-- STICKY CONTACT -->
+      <div class="cta-bar">
+        <div class="who"><div class="l1">Tommy Frank</div><div class="l2"><i></i>Online · ~1h</div></div>
+        <button class="btn gold" id="contactBtn">Contact <span class="arw"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg></span></button>
+      </div>
+
+      <!-- LIGHTBOX -->
+      <div class="lb" id="lb"><button class="x" id="lbX" aria-label="Close">✕</button><img id="lbImg" src="" alt="" /></div>
+
+    </div>
+  </div>
+
+  <div class="page-cap">Signature: a cinematic <b>swipe film-strip</b> reel with gold captions — the mobile translation of the desktop pinned reel. Fraunces serif · Space Mono · gold · grain.</div>
+
+  <script>
+    (function(){
+      var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      var scroll = document.getElementById('scroll');
+
+      /* reveals — show what's already on screen immediately, observe the rest */
+      var rvs=[].slice.call(document.querySelectorAll('.rv'));
+      function inView(el){ var r=el.getBoundingClientRect(), sr=scroll.getBoundingClientRect(); return r.top < sr.bottom*0.98 && r.bottom > sr.top; }
+      if('IntersectionObserver' in window && !reduce){
+        var io=new IntersectionObserver(function(es){es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target);} });},{root:scroll,threshold:.14});
+        rvs.forEach(function(el){ if(inView(el)) el.classList.add('in'); else io.observe(el); });
+        setTimeout(function(){ rvs.forEach(function(el){el.classList.add('in');}); }, 1600);
+      } else { rvs.forEach(function(el){el.classList.add('in');}); }
+
+      /* count-up */
+      function countUp(el){ var t=parseFloat(el.dataset.c), sfx=el.dataset.suffix||'', dec=(t%1!==0)?1:0;
+        if(reduce){el.firstChild.textContent=t.toFixed(dec)+sfx;return;}
+        var st=null; function step(ts){ if(!st)st=ts; var p=Math.min((ts-st)/900,1); var v=t*(0.25+0.75*p);
+          el.firstChild.textContent=(p<1?v.toFixed(dec):t.toFixed(dec))+sfx; if(p<1)requestAnimationFrame(step);} requestAnimationFrame(step); }
+      if('IntersectionObserver' in window){ var so=new IntersectionObserver(function(es){es.forEach(function(e){ if(e.isIntersecting){countUp(e.target);so.unobserve(e.target);} });},{root:scroll,threshold:.6});
+        document.querySelectorAll('[data-c]').forEach(function(el){so.observe(el);}); }
+
+      /* dist bars */
+      var dist=document.getElementById('dist');
+      if(dist){ if('IntersectionObserver' in window && !reduce){ var dobs=new IntersectionObserver(function(es){es.forEach(function(e){ if(e.isIntersecting){ e.target.querySelectorAll('i[data-w]').forEach(function(i){i.style.width=i.dataset.w+'%';}); dobs.unobserve(e.target);} });},{root:scroll,threshold:.4}); dobs.observe(dist); }
+        else { dist.querySelectorAll('i[data-w]').forEach(function(i){i.style.width=i.dataset.w+'%';}); } }
+
+      /* hero image parallax (driven by inner scroll) */
+      var heroImg=document.getElementById('heroImg');
+      if(heroImg && !reduce){ scroll.addEventListener('scroll',function(){ var y=scroll.scrollTop; if(y<scroll.clientHeight){ heroImg.style.transform='translateY('+(y*-0.05)+'px)'; } },{passive:true}); }
+
+      /* reel progress (tracks horizontal swipe) */
+      var reel=document.getElementById('reel'), reelProg=document.getElementById('reelProg');
+      if(reel && reelProg){ reel.addEventListener('scroll',function(){ var max=reel.scrollWidth-reel.clientWidth; var p=max>0?reel.scrollLeft/max:0;
+        reelProg.style.transform='translateX('+(p*233)+'%)'; },{passive:true}); }
+
+      /* lightbox */
+      var lb=document.getElementById('lb'), lbImg=document.getElementById('lbImg');
+      function open(src){ if(!src)return; lbImg.src=src; lb.classList.add('show'); }
+      function close(){ lb.classList.remove('show'); lbImg.src=''; }
+      document.querySelectorAll('.reel-plate').forEach(function(p){ p.addEventListener('click',function(){ open(p.dataset.img); }); });
+      document.getElementById('lbX').addEventListener('click',close);
+      lb.addEventListener('click',function(e){ if(e.target===lb) close(); });
+
+      /* AI fit */
+      var answers={
+        bookcover:{v:"<b>Strong fit.</b> Tommy has dark sci-fi <b>book covers</b> in his portfolio and reviews praise cover work (\"double the pre-orders\", print-ready). His atmospheric, cinematic mood is exactly this brief.",
+          why:["12 cover pieces","188 cover reviews","Print-ready"],rec:"Standard",price:"$85",src:"5 portfolio pieces + 188 cover reviews"},
+        game:{v:"<b>Great fit.</b> He ships <b>cinematic game key art</b> and concept design; recent clients call it their \"store hero\" and praise 1-hour replies.",
+          why:["Game-art gigs","211 reviews","Studio-level"],rec:"Premium",price:"$150",src:"game-art gig + 211 reviews"},
+        album:{v:"<b>Good fit.</b> <b>Album artwork</b> sits in his editorial/cover range — vivid color, bold composition, fast turnaround for release deadlines.",
+          why:["Cover & editorial range","Fast delivery","Vivid color"],rec:"Standard",price:"$85",src:"cover portfolio + recent deliveries"},
+        character:{v:"<b>Strong fit.</b> <b>Character design</b> is a listed skill with multi-character scenes in his concept work; a recent review highlights a complex scene nailed on brief.",
+          why:["Character design","Concept reviews","Right questions"],rec:"Premium",price:"$150",src:"concept-art portfolio + reviews"}
+      };
+      var out=document.getElementById('aiOut');
+      function think(){ out.classList.add('show'); out.innerHTML='<div class="ai-think"><div class="tlabel"><span class="pulse"></span>Reading the studio archive…</div><div class="ln w90"></div><div class="ln w70"></div><div class="ln w45"></div></div>'; }
+      function render(a){
+        var why=a.why.map(function(w){return '<span class="w"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5" stroke-linecap="round" stroke-linejoin="round"/></svg>'+w+'</span>';}).join('');
+        out.innerHTML='<div class="ai-res"><p class="ai-verdict">'+a.v+'</p><div class="ai-why">'+why+'</div>'+
+          '<div class="ai-rec"><div><div class="rl">Recommended</div><div class="rp">'+a.rec+' — <span class="pr">'+a.price+'</span></div></div><a class="btn gold" href="index.html">Select <span class="arw"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a></div>'+
+          '<div class="ai-src">✦ AI summary · based on '+a.src+'</div></div>';
+      }
+      document.getElementById('aiChips').addEventListener('click',function(e){ var b=e.target.closest('.ai-chip'); if(!b)return; var a=answers[b.dataset.k];
+        if(reduce){ out.classList.add('show'); render(a); } else { think(); setTimeout(function(){render(a);},760); } });
+
+      /* contact feedback */
+      document.querySelectorAll('[data-contact],#contactBtn').forEach(function(b){ b.addEventListener('click',function(){ var html=this.innerHTML; var self=this; this.innerHTML='Opening chat…'; setTimeout(function(){self.innerHTML=html;},1300); }); });
+    })();
+  </script>
+</body>
+</html>
